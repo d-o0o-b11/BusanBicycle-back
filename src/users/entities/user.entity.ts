@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { MyPageEntity } from './mypage.entity';
 
 @Entity('User')
 export class UserEntity {
@@ -10,4 +17,7 @@ export class UserEntity {
 
   @Column({ type: 'varchar', length: 30 })
   user_pw: string;
+
+  @OneToOne((type) => MyPageEntity, (user) => user.userInfo)
+  mypage: MyPageEntity;
 }
