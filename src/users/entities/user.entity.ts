@@ -6,8 +6,8 @@ export class UserEntity {
   id: number;
 
   @Column({ type: 'varchar', length: 30 })
-  member_id: string;
+  user_id: string;
 
   @Column({ type: 'varchar', length: 30 })
-  member_pw: string;
+  user_pw: string;
 }

@@ -6,37 +6,43 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  InternalServerErrorException,
+  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { NotFoundError } from 'rxjs';
+import { CheckIdDto } from './dto/checkid-user.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @Post('/signup')
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.signup(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @Get('/login')
+  async findlogin(@Body() loginData: CreateUserDto) {
+    try {
+      return await this.usersService.login(loginData);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Get('/logincheck')
+  async checkUserId(@Body() data: CheckIdDto) {
+    try {
+      return await this.usersService.checkUserId(data.user_id);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }
