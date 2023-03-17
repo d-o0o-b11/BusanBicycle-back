@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from 'src/users/entities/user.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('bicycle_course')
 export class BicycleCourseEntity {
@@ -26,9 +33,7 @@ export class BicycleCourseEntity {
   @Column('bool')
   finish: boolean;
 
-  // "total": "2.56",
-  //         "gugunNm": "부산광역시 해운대구",
-  //         "gugunWithWalk": "2.56",
-  //         "startSpot": "우동 1413-5",
-  //         "endSpot": "우동 1544"
+  @OneToMany(() => UserEntity, (user) => user.course)
+  @JoinColumn({ name: 'user' })
+  user?: UserEntity;
 }

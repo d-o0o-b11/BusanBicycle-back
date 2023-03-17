@@ -1,7 +1,9 @@
+import { BicycleCourseEntity } from 'src/bicycle-course/entities/bicycle-course.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -20,4 +22,7 @@ export class UserEntity {
 
   @OneToOne((type) => MyPageEntity, (user) => user.userInfo)
   mypage: MyPageEntity;
+
+  @ManyToOne(() => BicycleCourseEntity, (course) => course.user)
+  course?: BicycleCourseEntity;
 }
