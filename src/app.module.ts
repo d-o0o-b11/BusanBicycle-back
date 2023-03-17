@@ -6,8 +6,8 @@ import { UserEntity } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { MyPageEntity } from './users/entities/mypage.entity';
-import { BicycleCorseModule } from './bicycle-corse/bicycle-corse.module';
 import { BicycleCourseModule } from './bicycle-course/bicycle-course.module';
+import { BicycleCourseEntity } from './bicycle-course/entities/bicycle-course.entity';
 
 @Module({
   imports: [
@@ -24,11 +24,10 @@ import { BicycleCourseModule } from './bicycle-course/bicycle-course.module';
       //   },
       // },
       synchronize: true,
-      entities: [UserEntity, MyPageEntity],
+      entities: [UserEntity, MyPageEntity, BicycleCourseEntity],
     }),
     UsersModule,
     AuthModule,
-    BicycleCorseModule,
     BicycleCourseModule,
   ],
   controllers: [AppController],
