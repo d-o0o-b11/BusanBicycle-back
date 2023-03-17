@@ -6,6 +6,7 @@ import { UserEntity } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { MyPageEntity } from './users/entities/mypage.entity';
+import { BicycleCorseModule } from './bicycle-corse/bicycle-corse.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { MyPageEntity } from './users/entities/mypage.entity';
     }),
     UsersModule,
     AuthModule,
+    BicycleCorseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
