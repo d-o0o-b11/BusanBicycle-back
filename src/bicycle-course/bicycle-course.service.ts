@@ -30,21 +30,9 @@ export class BicycleCourseService {
     return '저장 성공';
   }
 
-  async findAll() {
+  async findAllBicycleCourseData() {
     const result = await this.bicycleCourseRepository.find();
 
     return result;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} bicycleCourse`;
-  }
-
-  update(id: number, updateBicycleCourseDto: UpdateBicycleCourseDto) {
-    return `This action updates a #${id} bicycleCourse`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} bicycleCourse`;
   }
 }

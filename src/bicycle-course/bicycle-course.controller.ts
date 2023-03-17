@@ -27,24 +27,6 @@ export class BicycleCourseController {
 
   @Get()
   findBicycleCourse() {
-    return this.bicycleCourseService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.bicycleCourseService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateBicycleCourseDto: UpdateBicycleCourseDto,
-  ) {
-    return this.bicycleCourseService.update(+id, updateBicycleCourseDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.bicycleCourseService.remove(+id);
+    return this.bicycleCourseService.findAllBicycleCourseData();
   }
 }
