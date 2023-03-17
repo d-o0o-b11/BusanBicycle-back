@@ -15,9 +15,12 @@ import { UpdateBicycleCourseDto } from './dto/update-bicycle-course.dto';
 export class BicycleCourseController {
   constructor(private readonly bicycleCourseService: BicycleCourseService) {}
 
+  // 자전거 코스 저장 api
   @Post()
-  create(@Body() createBicycleCourseDto: CreateBicycleCourseDto) {
-    return this.bicycleCourseService.create(createBicycleCourseDto);
+  create(@Body() createBicycleCourseDto: CreateBicycleCourseDto[]) {
+    return this.bicycleCourseService.saveBicycleCourseData(
+      createBicycleCourseDto,
+    );
   }
 
   @Get()

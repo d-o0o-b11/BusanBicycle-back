@@ -24,14 +24,14 @@ export class BicycleCourseEntity {
   @Column('varchar')
   endSpot: string;
 
-  @Column('int4')
-  total: number;
+  @Column('varchar')
+  total: string;
 
-  @Column('int4')
+  @Column('int4', { default: 0 })
   like: number;
 
-  @Column('bool')
-  finish: boolean;
+  @Column('bool', { nullable: true, default: false })
+  finish?: boolean | false;
 
   @OneToMany(() => UserEntity, (user) => user.course)
   @JoinColumn({ name: 'user' })
