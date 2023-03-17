@@ -17,14 +17,16 @@ export class BicycleCourseController {
 
   // 자전거 코스 저장 api
   @Post()
-  create(@Body() createBicycleCourseDto: CreateBicycleCourseDto[]) {
+  createBicycleCourse(
+    @Body() createBicycleCourseDto: CreateBicycleCourseDto[],
+  ) {
     return this.bicycleCourseService.saveBicycleCourseData(
       createBicycleCourseDto,
     );
   }
 
   @Get()
-  findAll() {
+  findBicycleCourse() {
     return this.bicycleCourseService.findAll();
   }
 

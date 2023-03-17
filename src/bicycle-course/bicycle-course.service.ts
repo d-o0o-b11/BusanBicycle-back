@@ -27,11 +27,13 @@ export class BicycleCourseService {
 
     await this.bicycleCourseRepository.save(saveResult);
 
-    return 'This action adds a new bicycleCourse';
+    return '저장 성공';
   }
 
-  findAll() {
-    return `This action returns all bicycleCourse`;
+  async findAll() {
+    const result = await this.bicycleCourseRepository.find();
+
+    return result;
   }
 
   findOne(id: number) {
