@@ -1,11 +1,4 @@
-import { UserEntity } from 'src/users/entities/user.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('bicycle_course')
 export class BicycleCourseEntity {
@@ -26,14 +19,4 @@ export class BicycleCourseEntity {
 
   @Column('varchar')
   total: string;
-
-  @Column('int4', { default: 0 })
-  like: number;
-
-  @Column('bool', { nullable: true, default: false })
-  finish?: boolean | false;
-
-  @OneToMany(() => UserEntity, (user) => user.course)
-  @JoinColumn({ name: 'user' })
-  user?: UserEntity;
 }

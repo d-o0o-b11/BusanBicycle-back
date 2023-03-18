@@ -5,9 +5,10 @@ import { AppService } from './app.service';
 import { UserEntity } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { MyPageEntity } from './users/entities/mypage.entity';
 import { BicycleCourseModule } from './bicycle-course/bicycle-course.module';
 import { BicycleCourseEntity } from './bicycle-course/entities/bicycle-course.entity';
+import { CourseLikeEntity } from './bicycle-course/entities/course-like.entity';
+import { CourseFinishEntity } from './bicycle-course/entities/course-finish.entity';
 
 @Module({
   imports: [
@@ -24,7 +25,12 @@ import { BicycleCourseEntity } from './bicycle-course/entities/bicycle-course.en
       //   },
       // },
       synchronize: true,
-      entities: [UserEntity, MyPageEntity, BicycleCourseEntity],
+      entities: [
+        UserEntity,
+        BicycleCourseEntity,
+        CourseLikeEntity,
+        CourseFinishEntity,
+      ],
     }),
     UsersModule,
     AuthModule,
