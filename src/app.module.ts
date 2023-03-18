@@ -9,6 +9,7 @@ import { BicycleCourseModule } from './bicycle-course/bicycle-course.module';
 import { BicycleCourseEntity } from './bicycle-course/entities/bicycle-course.entity';
 import { CourseLikeEntity } from './bicycle-course/entities/course-like.entity';
 import { CourseFinishEntity } from './bicycle-course/entities/course-finish.entity';
+import { JwtStrategy } from './auth/strategies/jwtToken.strategy';
 
 @Module({
   imports: [

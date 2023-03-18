@@ -3,13 +3,13 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
+  UseGuards,
+  InternalServerErrorException,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtStrategy } from 'src/auth/strategies/jwtToken.strategy';
 import { BicycleCourseService } from './bicycle-course.service';
 import { CreateBicycleCourseDto } from './dto/create-bicycle-course.dto';
-import { UpdateBicycleCourseDto } from './dto/update-bicycle-course.dto';
 
 @Controller('bicycle-course')
 export class BicycleCourseController {
@@ -26,7 +26,12 @@ export class BicycleCourseController {
   }
 
   @Get()
+  @UseGuards(AuthGuard(JwtStrategy.key))
   findBicycleCourse() {
-    return this.bicycleCourseService.findAllBicycleCourseData();
+    try {
+      return this.bicycleCourseService.findAllBicycleCourseData();
+    } catch (e) {
+      throw new InternalServerErrorException(e.message);
+    }
   }
 }
