@@ -53,4 +53,14 @@ export class BicycleCourseController {
   // async deleteCourseFinish(@Body() data) {
   //   return await this.bicycleCourseService.deleteFinishCourse(data.id);
   // }
+
+  /**
+   * 유저 완주 목록 출력
+   * @param data
+   * @returns
+   */
+  @Get('finish')
+  async getCourseFinish(@Body() data) {
+    return await this.bicycleCourseService.getAllFinishCourse(data);
+  }
 }

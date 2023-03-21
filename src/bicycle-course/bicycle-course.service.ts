@@ -154,4 +154,22 @@ export class BicycleCourseService {
 
     return result;
   }
+
+  /**
+   * 유저의 완주 목록 출력
+   * @param data
+   * @returns
+   */
+  async getAllFinishCourse(data) {
+    const result = await this.courseFinishRepository.find({
+      where: {
+        user_id: data.user_id,
+      },
+      relations: {
+        course: true,
+      },
+    });
+
+    return result;
+  }
 }
