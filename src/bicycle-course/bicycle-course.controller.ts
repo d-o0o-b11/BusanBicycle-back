@@ -6,12 +6,13 @@ import {
   UseGuards,
   InternalServerErrorException,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtStrategy } from 'src/auth/strategies/jwtToken.strategy';
 import { BicycleCourseService } from './bicycle-course.service';
 import { CreateBicycleCourseDto } from './dto/create-bicycle-course.dto';
-import { UserIdDto } from './dto/userId.dto';
+import { UserLiekDto } from './dto/userId.dto';
 
 @Controller('bicycle-course')
 export class BicycleCourseController {
@@ -38,7 +39,17 @@ export class BicycleCourseController {
   }
 
   @Patch('like')
-  async bicycleCourseLike(@Body() data: UserIdDto) {
-    return await this.bicycleCourseService.updateCourseLike(data.user_id);
+  async bicycleCourseLikeCheck(@Body() data: UserLiekDto) {
+    return await this.bicycleCourseService.checkCourseLike(data);
   }
+
+  // @Post('like')
+  // async bicycleCourseLike(@Body() data: UserLiekDto) {
+  //   return await this.bicycleCourseService.saveCourseLike(data);
+  // }
+
+  // @Delete('like')
+  // async bicycleCourseLikeDel(@Body() data) {
+  //   return await this.bicycleCourseService.deleteCourseLike(data);
+  // }
 }

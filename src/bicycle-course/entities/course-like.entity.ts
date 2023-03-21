@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -11,13 +12,13 @@ export class CourseLikeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 30 })
-  user_id: string;
+  @Column('int4')
+  user_id: number;
 
   @Column('int4')
   course_id: number;
 
-  @OneToOne(() => BicycleCourseEntity)
+  @ManyToOne(() => BicycleCourseEntity)
   @JoinColumn({ name: 'course_id' })
   like: BicycleCourseEntity;
 }

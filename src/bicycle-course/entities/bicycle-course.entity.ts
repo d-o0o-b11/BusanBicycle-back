@@ -28,6 +28,6 @@ export class BicycleCourseEntity {
   @Column('varchar')
   total: string;
 
-  @OneToOne(() => CourseLikeEntity, (m) => m.like)
-  like: CourseLikeEntity;
+  @OneToMany(() => CourseLikeEntity, (m) => m.like)
+  like: CourseLikeEntity[];
 }
