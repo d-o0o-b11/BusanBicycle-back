@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createQueryBuilder, Repository } from 'typeorm';
 import { CreateBicycleCourseDto } from './dto/create-bicycle-course.dto';
+import { UserLiekDto } from './dto/userId.dto';
 import { BicycleCourseEntity } from './entities/bicycle-course.entity';
 import { CourseLikeEntity } from './entities/course-like.entity';
 
@@ -38,21 +39,71 @@ export class BicycleCourseService {
       relations: {
         like: true,
       },
+      order: {
+        id: 'ASC',
+      },
     });
 
-    const like = await this.courseLikeRepository.count();
-    console.log('좋아요', like);
+    // const like = await this.courseLikeRepository.count();
+    // console.log('좋아요', like);
 
     // const test = result.map((n) => {
     //   n.gugunNm, n.startSpot, n.endSpot, n.like;
     // });
 
     // const test = await this.bicycleCourseRepository.createQueryBuilder
+    /**
+     * select count(*)
+      from bicycle_course bc 
+      left join course_like cl 
+      on bc.id =cl.course_id
+      group by bc.id
+      order by bc.id asc
+
+     */
 
     return result;
   }
 
-  async updateCourseLike(user_id) {
-    return user_id;
+  async checkCourseLike(data: UserLiekDto) {
+    const findData = await this.courseLikeRepository.findOne({
+      where: {
+        course_id: data.course_id,
+        user_id: data.user_id,
+      },
+    });
+
+    if (findData) {
+      return await this.deleteCourseLike(findData.id);
+    } else {
+      return await this.saveCourseLike(data);
+    }
+  }
+
+  /**
+   * 좋아요 추가
+   * @param data UserLikeDto
+   * @returns
+   */
+  async saveCourseLike(data: UserLiekDto) {
+    const entity = new CourseLikeEntity();
+
+    entity.course_id = data.course_id;
+    entity.user_id = data.user_id;
+
+    return await this.courseLikeRepository.save(entity);
+  }
+
+  /**
+   * 좋아요 삭제
+   * @param id
+   * @returns
+   */
+  async deleteCourseLike(id: number) {
+    if (id) {
+      return await this.courseLikeRepository.delete(id);
+    } else {
+      return new Error('존재하지 않는 코스 아이디입니다.');
+    }
   }
 }

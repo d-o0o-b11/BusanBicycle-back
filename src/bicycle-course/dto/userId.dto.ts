@@ -1,6 +1,14 @@
-import { IsString } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
 
-export class UserIdDto {
-  @IsString()
-  user_id: string;
+export class UserLiekDto {
+  @IsNumber()
+  id?: number;
+
+  @IsNumber()
+  @IsOptional()
+  user_id?: number;
+
+  @IsNumber()
+  @IsOptional()
+  course_id?: number;
 }
