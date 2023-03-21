@@ -44,7 +44,7 @@ export class BicycleCourseController {
     return await this.bicycleCourseService.checkCourseLike(data);
   }
 
-  @Post('finish')
+  @Patch('finish')
   async bicycleCourseFinish(@Body() data: FinishCourseDto) {
     return await this.bicycleCourseService.checkCourseFinish(data);
   }
