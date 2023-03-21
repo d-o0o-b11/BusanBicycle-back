@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { createQueryBuilder, Repository } from 'typeorm';
 import { CreateBicycleCourseDto } from './dto/create-bicycle-course.dto';
 import { FinishCourseDto } from './dto/finish-course.dto';
-import { UserLiekDto } from './dto/userId.dto';
+import { UserDto } from './dto/userId.dto';
 import { BicycleCourseEntity } from './entities/bicycle-course.entity';
 import { CourseFinishEntity } from './entities/course-finish.entity';
 import { CourseLikeEntity } from './entities/course-like.entity';
@@ -70,7 +70,7 @@ export class BicycleCourseService {
     return result;
   }
 
-  async checkCourseLike(data: UserLiekDto) {
+  async checkCourseLike(data: UserDto) {
     const findData = await this.courseLikeRepository.findOne({
       where: {
         course_id: data.course_id,
@@ -90,7 +90,7 @@ export class BicycleCourseService {
    * @param data UserLikeDto
    * @returns
    */
-  async saveCourseLike(data: UserLiekDto) {
+  async saveCourseLike(data: UserDto) {
     const entity = new CourseLikeEntity();
 
     entity.course_id = data.course_id;
@@ -113,9 +113,29 @@ export class BicycleCourseService {
   }
 
   /**
+   * 최종 완주 서비스
+   * @param data
+   * @returns
+   */
+  async checkCourseFinish(data: UserDto) {
+    const findData = await this.courseFinishRepository.findOne({
+      where: {
+        course_id: data.course_id,
+        user_id: data.user_id,
+      },
+    });
+
+    if (findData) {
+      return await this.deleteFinishCourse(findData.id);
+    } else {
+      return await this.saveFinishCourse(data);
+    }
+  }
+
+  /**
    * 완주 저장
    */
-  async saveFinishCourse(data: FinishCourseDto) {
+  async saveFinishCourse(data: UserDto) {
     const entity = new CourseFinishEntity();
 
     entity.course_id = data.course_id;
