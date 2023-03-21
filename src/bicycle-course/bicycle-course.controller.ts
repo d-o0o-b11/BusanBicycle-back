@@ -48,4 +48,9 @@ export class BicycleCourseController {
   async bicycleCourseFinish(@Body() data: FinishCourseDto) {
     return await this.bicycleCourseService.saveFinishCourse(data);
   }
+
+  @Delete('finish')
+  async deleteCourseFinish(@Body() data) {
+    return await this.bicycleCourseService.deleteFinishCourse(data.id);
+  }
 }

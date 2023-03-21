@@ -125,4 +125,13 @@ export class BicycleCourseService {
 
     return result;
   }
+
+  /**
+   * 완주 취소
+   */
+  async deleteFinishCourse(id: number) {
+    const result = await this.courseFinishRepository.delete(id);
+
+    return result;
+  }
 }
