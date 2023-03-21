@@ -42,14 +42,4 @@ export class BicycleCourseController {
   async bicycleCourseLikeCheck(@Body() data: UserLiekDto) {
     return await this.bicycleCourseService.checkCourseLike(data);
   }
-
-  // @Post('like')
-  // async bicycleCourseLike(@Body() data: UserLiekDto) {
-  //   return await this.bicycleCourseService.saveCourseLike(data);
-  // }
-
-  // @Delete('like')
-  // async bicycleCourseLikeDel(@Body() data) {
-  //   return await this.bicycleCourseService.deleteCourseLike(data);
-  // }
 }

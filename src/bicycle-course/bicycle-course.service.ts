@@ -44,14 +44,23 @@ export class BicycleCourseService {
       },
     });
 
-    const like = await this.courseLikeRepository.count();
-    console.log('좋아요', like);
+    // const like = await this.courseLikeRepository.count();
+    // console.log('좋아요', like);
 
     // const test = result.map((n) => {
     //   n.gugunNm, n.startSpot, n.endSpot, n.like;
     // });
 
     // const test = await this.bicycleCourseRepository.createQueryBuilder
+    /**
+     * select count(*)
+      from bicycle_course bc 
+      left join course_like cl 
+      on bc.id =cl.course_id
+      group by bc.id
+      order by bc.id asc
+
+     */
 
     return result;
   }
