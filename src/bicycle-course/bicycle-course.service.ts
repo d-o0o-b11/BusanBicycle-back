@@ -57,7 +57,7 @@ export class BicycleCourseService {
   }
 
   async checkCourseLike(data: UserLiekDto) {
-    const findData = await this.courseLikeRepository.find({
+    const findData = await this.courseLikeRepository.findOne({
       where: {
         course_id: data.course_id,
         user_id: data.user_id,
@@ -65,7 +65,7 @@ export class BicycleCourseService {
     });
 
     if (findData) {
-      return await this.deleteCourseLike(data.id);
+      return await this.deleteCourseLike(findData.id);
     } else {
       return await this.saveCourseLike(data);
     }
@@ -90,21 +90,11 @@ export class BicycleCourseService {
    * @param id
    * @returns
    */
-  async deleteCourseLike(id) {
-    const findId = await this.courseLikeRepository.findOne({
-      where: {
-        id: id,
-      },
-    });
-
-    if (findId) {
+  async deleteCourseLike(id: number) {
+    if (id) {
       return await this.courseLikeRepository.delete(id);
     } else {
       return new Error('존재하지 않는 코스 아이디입니다.');
     }
-
-    // const test = await this.courseLikeRepository.delete(id);
-
-    // return test;
   }
 }
