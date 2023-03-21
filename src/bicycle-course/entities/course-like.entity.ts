@@ -20,5 +20,5 @@ export class CourseLikeEntity {
 
   @ManyToOne(() => BicycleCourseEntity)
   @JoinColumn({ name: 'course_id' })
-  like: BicycleCourseEntity;
+  course: BicycleCourseEntity;
 }

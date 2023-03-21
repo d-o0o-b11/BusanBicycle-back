@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createQueryBuilder, Repository } from 'typeorm';
 import { CreateBicycleCourseDto } from './dto/create-bicycle-course.dto';
+import { FinishCourseDto } from './dto/finish-course.dto';
 import { UserLiekDto } from './dto/userId.dto';
 import { BicycleCourseEntity } from './entities/bicycle-course.entity';
+import { CourseFinishEntity } from './entities/course-finish.entity';
 import { CourseLikeEntity } from './entities/course-like.entity';
 
 @Injectable()
@@ -14,6 +16,9 @@ export class BicycleCourseService {
 
     @InjectRepository(CourseLikeEntity)
     private readonly courseLikeRepository: Repository<CourseLikeEntity>,
+
+    @InjectRepository(CourseFinishEntity)
+    private readonly courseFinishRepository: Repository<CourseFinishEntity>,
   ) {}
 
   async saveBicycleCourseData(
@@ -105,5 +110,19 @@ export class BicycleCourseService {
     } else {
       return new Error('존재하지 않는 코스 아이디입니다.');
     }
+  }
+
+  /**
+   * 완주 저장
+   */
+  async saveFinishCourse(data: FinishCourseDto) {
+    const entity = new CourseFinishEntity();
+
+    entity.course_id = data.course_id;
+    entity.user_id = data.user_id;
+
+    const result = await this.courseFinishRepository.save(entity);
+
+    return result;
   }
 }

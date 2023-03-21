@@ -12,6 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtStrategy } from 'src/auth/strategies/jwtToken.strategy';
 import { BicycleCourseService } from './bicycle-course.service';
 import { CreateBicycleCourseDto } from './dto/create-bicycle-course.dto';
+import { FinishCourseDto } from './dto/finish-course.dto';
 import { UserLiekDto } from './dto/userId.dto';
 
 @Controller('bicycle-course')
@@ -41,5 +42,10 @@ export class BicycleCourseController {
   @Patch('like')
   async bicycleCourseLikeCheck(@Body() data: UserLiekDto) {
     return await this.bicycleCourseService.checkCourseLike(data);
+  }
+
+  @Post('finish')
+  async bicycleCourseFinish(@Body() data: FinishCourseDto) {
+    return await this.bicycleCourseService.saveFinishCourse(data);
   }
 }
