@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { createQueryBuilder, Repository } from 'typeorm';
 import { CreateBicycleCourseDto } from './dto/create-bicycle-course.dto';
-import { UpdateBicycleCourseDto } from './dto/update-bicycle-course.dto';
 import { BicycleCourseEntity } from './entities/bicycle-course.entity';
+import { CourseLikeEntity } from './entities/course-like.entity';
 
 @Injectable()
 export class BicycleCourseService {
   constructor(
     @InjectRepository(BicycleCourseEntity)
     private readonly bicycleCourseRepository: Repository<BicycleCourseEntity>,
+
+    @InjectRepository(CourseLikeEntity)
+    private readonly courseLikeRepository: Repository<CourseLikeEntity>,
   ) {}
 
   async saveBicycleCourseData(
@@ -31,8 +34,25 @@ export class BicycleCourseService {
   }
 
   async findAllBicycleCourseData() {
-    const result = await this.bicycleCourseRepository.find();
+    const result = await this.bicycleCourseRepository.find({
+      relations: {
+        like: true,
+      },
+    });
+
+    const like = await this.courseLikeRepository.count();
+    console.log('좋아요', like);
+
+    // const test = result.map((n) => {
+    //   n.gugunNm, n.startSpot, n.endSpot, n.like;
+    // });
+
+    // const test = await this.bicycleCourseRepository.createQueryBuilder
 
     return result;
+  }
+
+  async updateCourseLike(user_id) {
+    return user_id;
   }
 }

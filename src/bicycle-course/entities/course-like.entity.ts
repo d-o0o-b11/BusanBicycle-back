@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { BicycleCourseEntity } from './bicycle-course.entity';
 @Entity('course_like')
 export class CourseLikeEntity {
   @PrimaryGeneratedColumn()
@@ -9,4 +16,8 @@ export class CourseLikeEntity {
 
   @Column('int4')
   course_id: number;
+
+  @OneToOne(() => BicycleCourseEntity)
+  @JoinColumn({ name: 'course_id' })
+  like: BicycleCourseEntity;
 }

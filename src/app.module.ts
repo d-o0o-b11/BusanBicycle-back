@@ -10,29 +10,32 @@ import { BicycleCourseEntity } from './bicycle-course/entities/bicycle-course.en
 import { CourseLikeEntity } from './bicycle-course/entities/course-like.entity';
 import { CourseFinishEntity } from './bicycle-course/entities/course-finish.entity';
 import { JwtStrategy } from './auth/strategies/jwtToken.strategy';
+import { typeORMConfig } from './configs/typeorm.config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'DataBase',
-      port: 5432,
-      username: 'test',
-      password: '1234',
-      database: 'postgres',
-      // extra: {
-      //   ssl: {
-      //     rejectUnauthorized: false,
-      //   },
-      // },
-      synchronize: true,
-      entities: [
-        UserEntity,
-        BicycleCourseEntity,
-        CourseLikeEntity,
-        CourseFinishEntity,
-      ],
-    }),
+    // TypeOrmModule.forRoot({
+    //   type: 'postgres',
+    //   host: 'DataBase',
+    //   port: 5432,
+    //   username: 'test',
+    //   password: '1234',
+    //   database: 'postgres',
+    //   // extra: {
+    //   //   ssl: {
+    //   //     rejectUnauthorized: false,
+    //   //   },
+    //   // },
+    //   synchronize: true,
+    //   entities: [
+    //     // UserEntity,
+    //     // BicycleCourseEntity,
+    //     // CourseLikeEntity,
+    //     // CourseFinishEntity,
+    //     __dirname + './**/**/*.entity{.ts}',
+    //   ],
+    // }),
+    TypeOrmModule.forRoot(typeORMConfig),
     UsersModule,
     AuthModule,
     BicycleCourseModule,
