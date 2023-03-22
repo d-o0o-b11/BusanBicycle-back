@@ -172,4 +172,37 @@ export class BicycleCourseService {
 
     return result;
   }
+
+  async getBestCourse() {
+    const result = await this.bicycleCourseRepository
+      .createQueryBuilder('bestcourse')
+      // .leftJoin('bestcourse.like', 'like')
+      .select(['bestcourse.*', 'clike.*'])
+      .leftJoin(
+        (qb) =>
+          qb
+            .select('cl.course_id, count(*)')
+            .from(CourseLikeEntity, 'cl')
+            .groupBy('cl.course_id'),
+        'clike',
+        'bestcourse.id=clike.course_id',
+      )
+      // .groupBy('like.course_id');
+      .getRawMany();
+    // .leftJoinAndSelect('bestcourse.like', 'like')
+    // .where('bestcourse.course_id =1');
+
+    console.log(result);
+  }
 }
+
+/**
+ * select *
+from bicycle_course bc 
+left join(
+	select course_id, count(course_id)
+	from course_like cl 
+	group by course_id
+) as clike
+on id=clike.course_id
+ */
