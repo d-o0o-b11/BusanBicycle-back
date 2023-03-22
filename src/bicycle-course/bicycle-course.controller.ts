@@ -12,7 +12,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtStrategy } from 'src/auth/strategies/jwtToken.strategy';
 import { BicycleCourseService } from './bicycle-course.service';
 import { CreateBicycleCourseDto } from './dto/create-bicycle-course.dto';
-import { UserLiekDto } from './dto/userId.dto';
+import { FinishCourseDto } from './dto/finish-course.dto';
+import { UserDto } from './dto/userId.dto';
 
 @Controller('bicycle-course')
 export class BicycleCourseController {
@@ -39,7 +40,27 @@ export class BicycleCourseController {
   }
 
   @Patch('like')
-  async bicycleCourseLikeCheck(@Body() data: UserLiekDto) {
+  async bicycleCourseLikeCheck(@Body() data: UserDto) {
     return await this.bicycleCourseService.checkCourseLike(data);
+  }
+
+  @Patch('finish')
+  async bicycleCourseFinish(@Body() data: FinishCourseDto) {
+    return await this.bicycleCourseService.checkCourseFinish(data);
+  }
+
+  // @Delete('finish')
+  // async deleteCourseFinish(@Body() data) {
+  //   return await this.bicycleCourseService.deleteFinishCourse(data.id);
+  // }
+
+  /**
+   * 유저 완주 목록 출력
+   * @param data
+   * @returns
+   */
+  @Get('finish')
+  async getCourseFinish(@Body() data) {
+    return await this.bicycleCourseService.getAllFinishCourse(data);
   }
 }

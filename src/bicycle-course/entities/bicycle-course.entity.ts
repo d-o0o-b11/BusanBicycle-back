@@ -6,6 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { CourseFinishEntity } from './course-finish.entity';
 import { CourseLikeEntity } from './course-like.entity';
 
 @Entity('bicycle_course')
@@ -28,6 +29,9 @@ export class BicycleCourseEntity {
   @Column('varchar')
   total: string;
 
-  @OneToMany(() => CourseLikeEntity, (m) => m.like)
+  @OneToMany(() => CourseLikeEntity, (m) => m.course)
   like: CourseLikeEntity[];
+
+  @OneToMany(() => CourseFinishEntity, (m) => m.course)
+  finish: CourseFinishEntity[];
 }

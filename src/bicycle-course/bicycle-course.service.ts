@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createQueryBuilder, Repository } from 'typeorm';
 import { CreateBicycleCourseDto } from './dto/create-bicycle-course.dto';
-import { UserLiekDto } from './dto/userId.dto';
+import { FinishCourseDto } from './dto/finish-course.dto';
+import { UserDto } from './dto/userId.dto';
 import { BicycleCourseEntity } from './entities/bicycle-course.entity';
+import { CourseFinishEntity } from './entities/course-finish.entity';
 import { CourseLikeEntity } from './entities/course-like.entity';
 
 @Injectable()
@@ -14,6 +16,9 @@ export class BicycleCourseService {
 
     @InjectRepository(CourseLikeEntity)
     private readonly courseLikeRepository: Repository<CourseLikeEntity>,
+
+    @InjectRepository(CourseFinishEntity)
+    private readonly courseFinishRepository: Repository<CourseFinishEntity>,
   ) {}
 
   async saveBicycleCourseData(
@@ -65,7 +70,7 @@ export class BicycleCourseService {
     return result;
   }
 
-  async checkCourseLike(data: UserLiekDto) {
+  async checkCourseLike(data: UserDto) {
     const findData = await this.courseLikeRepository.findOne({
       where: {
         course_id: data.course_id,
@@ -85,7 +90,7 @@ export class BicycleCourseService {
    * @param data UserLikeDto
    * @returns
    */
-  async saveCourseLike(data: UserLiekDto) {
+  async saveCourseLike(data: UserDto) {
     const entity = new CourseLikeEntity();
 
     entity.course_id = data.course_id;
@@ -105,5 +110,66 @@ export class BicycleCourseService {
     } else {
       return new Error('존재하지 않는 코스 아이디입니다.');
     }
+  }
+
+  /**
+   * 최종 완주 서비스
+   * @param data
+   * @returns
+   */
+  async checkCourseFinish(data: UserDto) {
+    const findData = await this.courseFinishRepository.findOne({
+      where: {
+        course_id: data.course_id,
+        user_id: data.user_id,
+      },
+    });
+
+    if (findData) {
+      return await this.deleteFinishCourse(findData.id);
+    } else {
+      return await this.saveFinishCourse(data);
+    }
+  }
+
+  /**
+   * 완주 저장
+   */
+  async saveFinishCourse(data: UserDto) {
+    const entity = new CourseFinishEntity();
+
+    entity.course_id = data.course_id;
+    entity.user_id = data.user_id;
+
+    const result = await this.courseFinishRepository.save(entity);
+
+    return result;
+  }
+
+  /**
+   * 완주 취소
+   */
+  async deleteFinishCourse(id: number) {
+    const result = await this.courseFinishRepository.delete(id);
+
+    return result;
+  }
+
+  /**
+   * 유저의 완주 목록 출력
+   * @param data
+   * @returns
+   */
+  async getAllFinishCourse(data) {
+    const result = await this.courseFinishRepository.find({
+      where: {
+        user_id: data.user_id,
+      },
+      relations: {
+        course: true,
+      },
+    });
+
+    return result;
   }
 }
