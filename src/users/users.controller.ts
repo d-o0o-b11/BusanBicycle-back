@@ -16,7 +16,11 @@ export class UsersController {
 
   @Post('/signup')
   async createUser(@Body() createUserDto: CreateUserDto) {
-    return await this.usersService.signup(createUserDto);
+    try {
+      return await this.usersService.signup(createUserDto);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   @Get('/login')
