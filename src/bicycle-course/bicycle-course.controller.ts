@@ -63,4 +63,9 @@ export class BicycleCourseController {
   async getCourseFinish(@Body() data) {
     return await this.bicycleCourseService.getAllFinishCourse(data);
   }
+
+  @Get('bestCourse')
+  async getBestCourse() {
+    return await this.bicycleCourseService.getBestCourse();
+  }
 }

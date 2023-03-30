@@ -1,10 +1,9 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { NotFoundError } from './not-found.error';
 
 @Injectable()
 export class UsersService {
@@ -30,10 +29,10 @@ export class UsersService {
       where: { user_id: data.user_id },
     });
 
-    if (!result.user_id) {
-      throw new NotFoundError('존재하지 않는 아이디입니다.');
+    if (!result?.user_id) {
+      throw new NotFoundException('존재하지 않는 아이디입니다.');
     } else if (result.user_pw != data.user_pw) {
-      throw new NotFoundError('비밀번호가 틀렸습니다.');
+      throw new NotFoundException('비밀번호가 틀렸습니다.');
     }
     /**
      * 2가지 방법 존재
