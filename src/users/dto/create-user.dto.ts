@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, MaxLength } from 'class-validator';
+import { IsBoolean, IsString, MaxLength } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -17,4 +17,11 @@ export class CreateUserDto {
     example: '22',
   })
   user_pw: string;
+
+  @IsBoolean()
+  @ApiProperty({
+    description: '아이디 중복체크 여부',
+    example: true,
+  })
+  check: boolean;
 }

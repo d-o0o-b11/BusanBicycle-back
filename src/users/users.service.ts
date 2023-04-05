@@ -14,10 +14,15 @@ export class UsersService {
   ) {}
 
   async signup(data: CreateUserDto) {
+    if (!data.check) {
+      throw new Error('아이디 중복 체크해주세요');
+    }
+
     const entity = new UserEntity();
 
     entity.user_id = data.user_id;
     entity.user_pw = data.user_pw;
+    entity.check = data.check;
 
     const saveResult = await this.userRepository.save(entity);
 
