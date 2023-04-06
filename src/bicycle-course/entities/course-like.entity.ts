@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BicycleCourseEntity } from './bicycle-course.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
 @Entity('course_like')
 export class CourseLikeEntity {
   @PrimaryGeneratedColumn()
@@ -21,4 +22,8 @@ export class CourseLikeEntity {
   @ManyToOne(() => BicycleCourseEntity)
   @JoinColumn({ name: 'course_id' })
   course: BicycleCourseEntity;
+
+  @OneToOne(() => UserEntity)
+  @JoinColumn({ name: 'user_id' })
+  user: UserEntity;
 }

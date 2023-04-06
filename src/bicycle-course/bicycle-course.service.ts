@@ -160,10 +160,10 @@ export class BicycleCourseService {
    * @param data
    * @returns
    */
-  async getAllFinishCourse(data) {
+  async getAllFinishCourse(id: number) {
     const result = await this.courseFinishRepository.find({
       where: {
-        user_id: data.user_id,
+        user_id: id,
       },
       relations: {
         course: true,

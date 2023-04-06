@@ -5,10 +5,15 @@ import {
   Body,
   InternalServerErrorException,
   NotFoundException,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { CheckIdDto } from './dto/checkid-user.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Token } from 'src/auth/decorator/auth.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -43,5 +48,11 @@ export class UsersController {
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
+  }
+
+  @Get('myPage')
+  @UseGuards(JwtAuthGuard)
+  async getUserPage(@Token() token) {
+    return await this.usersService.myPage(token.id);
   }
 }

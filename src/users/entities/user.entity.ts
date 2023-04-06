@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { CourseFinishEntity } from 'src/bicycle-course/entities/course-finish.entity';
+import { CourseLikeEntity } from 'src/bicycle-course/entities/course-like.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('User')
 export class UserEntity {
@@ -13,4 +15,10 @@ export class UserEntity {
 
   @Column({ type: 'bool', default: false })
   check: boolean;
+
+  @OneToOne(() => CourseLikeEntity, (c) => c.user)
+  like: CourseLikeEntity;
+
+  @OneToOne(() => CourseFinishEntity, (c) => c.user)
+  finish: CourseFinishEntity;
 }

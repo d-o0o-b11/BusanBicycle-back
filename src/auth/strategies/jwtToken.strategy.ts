@@ -1,33 +1,24 @@
-import { Strategy } from 'passport-custom';
+// import { Strategy } from 'passport-custom';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtToken } from '../jwt-token.interface';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { jwtConstants } from '../constants';
 
+// }
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-token') {
-  constructor(private readonly jwtService: JwtService) {
-    super();
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+  constructor() {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: jwtConstants.secret,
+    });
   }
 
-  static key = 'jwt-token';
-
-  async validate(req: Request): Promise<any> {
-    const token = String(req.headers['authorization']).split('Bearer ')[1];
-    console.log(token);
-
-    const payload: JwtToken = this.jwtService.decode(token) as JwtToken;
-    console.log('payload', payload);
-
-    // if (!payload || !payload.groomer || !payload.id) {
-    //   const unAuthorizedException = new UnauthorizedException(
-    //     'Jwt Token 이 없어 인증이 실패하였습니다.',
-    //     req.url,
-    //   );
-
-    //   throw unAuthorizedException;
-    // }
-
-    return payload;
+  async validate(payload: any) {
+    // console.log(payload);
+    return { id: payload.id, user_id: payload.user_id };
   }
 }
