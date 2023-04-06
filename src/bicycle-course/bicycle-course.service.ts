@@ -61,6 +61,11 @@ export class BicycleCourseService {
     return result;
   }
 
+  /**
+   * 좋아요 기능
+   * @param data 유저 id, 코스 id
+   * @returns ...
+   */
   async checkCourseLike(data: UserDto) {
     const findData = await this.courseLikeRepository.findOne({
       where: {

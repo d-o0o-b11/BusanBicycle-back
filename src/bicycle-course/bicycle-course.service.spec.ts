@@ -17,6 +17,7 @@ describe('BicycleCourseService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         BicycleCourseService,
+
         {
           provide: getRepositoryToken(BicycleCourseEntity),
           useValue: mockRepository(),
@@ -98,6 +99,78 @@ describe('BicycleCourseService', () => {
           id: 'ASC',
         },
       });
+    });
+  });
+
+  describe('checkCourseLike', () => {
+    const findDataFirst = {
+      course_id: 1,
+      user_id: 4,
+      id: 24,
+    };
+
+    const findDataSecond = {
+      raw: [],
+      affected: 1,
+    };
+
+    const UserDummyData = {
+      user_id: 4,
+      course_id: 1,
+    };
+
+    it('처음 좋아요 누른 경우', async () => {
+      const findData = jest
+        .spyOn(courseLikeRepository, 'findOne')
+        .mockResolvedValue(undefined);
+
+      const saveCourseLike = jest
+        .spyOn(service, 'saveCourseLike')
+        .mockResolvedValue(findDataFirst as any);
+
+      const deleteCourseLike = jest.spyOn(service, 'deleteCourseLike');
+
+      await service.checkCourseLike(UserDummyData);
+
+      expect(findData).toBeCalledTimes(1);
+      expect(findData).toBeCalledWith({
+        where: {
+          course_id: UserDummyData.course_id,
+          user_id: UserDummyData.user_id,
+        },
+      });
+
+      expect(saveCourseLike).toBeCalledTimes(1);
+      expect(saveCourseLike).toBeCalledWith(UserDummyData);
+
+      expect(deleteCourseLike).toBeCalledTimes(0);
+    });
+
+    it('좋아요 누른 상태-> 지우기', async () => {
+      const findData = jest
+        .spyOn(courseLikeRepository, 'findOne')
+        .mockResolvedValue(findDataFirst as any);
+
+      const saveCourseLike = jest.spyOn(service, 'saveCourseLike');
+
+      const deleteCourseLike = jest
+        .spyOn(service, 'deleteCourseLike')
+        .mockResolvedValue(findDataSecond);
+
+      await service.checkCourseLike(UserDummyData);
+
+      expect(findData).toBeCalledTimes(1);
+      expect(findData).toBeCalledWith({
+        where: {
+          course_id: UserDummyData.course_id,
+          user_id: UserDummyData.user_id,
+        },
+      });
+
+      expect(saveCourseLike).toBeCalledTimes(0);
+
+      expect(deleteCourseLike).toBeCalledTimes(1);
+      expect(deleteCourseLike).toBeCalledWith(findDataFirst.id);
     });
   });
 });
