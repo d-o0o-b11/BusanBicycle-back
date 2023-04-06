@@ -21,6 +21,11 @@ export class BicycleCourseService {
     private readonly courseFinishRepository: Repository<CourseFinishEntity>,
   ) {}
 
+  /**
+   * 코스 데이터 한번에 저장하기 위한 api
+   * @param createBicycleCourseDto
+   * @returns 저장 성공
+   */
   async saveBicycleCourseData(
     createBicycleCourseDto: CreateBicycleCourseDto[],
   ) {
@@ -39,6 +44,10 @@ export class BicycleCourseService {
     return '저장 성공';
   }
 
+  /**
+   *
+   * @returns 모든 코스 데이터 출력
+   */
   async findAllBicycleCourseData() {
     const result = await this.bicycleCourseRepository.find({
       relations: {
@@ -48,24 +57,6 @@ export class BicycleCourseService {
         id: 'ASC',
       },
     });
-
-    // const like = await this.courseLikeRepository.count();
-    // console.log('좋아요', like);
-
-    // const test = result.map((n) => {
-    //   n.gugunNm, n.startSpot, n.endSpot, n.like;
-    // });
-
-    // const test = await this.bicycleCourseRepository.createQueryBuilder
-    /**
-     * select count(*)
-      from bicycle_course bc 
-      left join course_like cl 
-      on bc.id =cl.course_id
-      group by bc.id
-      order by bc.id asc
-
-     */
 
     return result;
   }
