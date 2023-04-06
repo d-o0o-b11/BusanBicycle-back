@@ -66,4 +66,8 @@ export class UsersService {
 
     return 'true';
   }
+
+  // async myPage(user_id: string){
+
+  // }
 }
