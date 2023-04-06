@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { BicycleCourseService } from 'src/bicycle-course/bicycle-course.service';
 
 @Injectable()
 export class UsersService {
@@ -11,6 +12,7 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private jwtService: JwtService,
+    private readonly bicycleService: BicycleCourseService,
   ) {}
 
   async signup(data: CreateUserDto) {
@@ -48,7 +50,7 @@ export class UsersService {
      * -> 간단하면 1번 , 좀 복잡하면 2번
      */
 
-    const payload = { user_id: data.user_id };
+    const payload = { id: result.id, user_id: data.user_id };
 
     return {
       access_token: this.jwtService.sign(payload),
@@ -67,7 +69,9 @@ export class UsersService {
     return 'true';
   }
 
-  // async myPage(user_id: string){
+  async myPage(id: number) {
+    const course_finsh = await this.bicycleService.getAllFinishCourse(id);
 
-  // }
+    return course_finsh;
+  }
 }

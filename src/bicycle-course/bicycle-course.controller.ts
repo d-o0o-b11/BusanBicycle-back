@@ -59,10 +59,11 @@ export class BicycleCourseController {
    * @param data
    * @returns
    */
-  @Get('finish')
-  async getCourseFinish(@Body() data) {
-    return await this.bicycleCourseService.getAllFinishCourse(data);
-  }
+  // @Get('finish')
+  // async getCourseFinish(@Body() data) {
+  //   return await this.bicycleCourseService.getAllFinishCourse(data);
+  // }
+  //--> 토큰 인증 절차를 거치기 위해서 user 폴더로 이동!! service만 ㅅㅏ용
 
   @Get('bestCourse')
   async getBestCourse() {

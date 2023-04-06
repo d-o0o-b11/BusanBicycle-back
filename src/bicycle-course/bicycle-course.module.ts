@@ -16,5 +16,6 @@ import { CourseFinishEntity } from './entities/course-finish.entity';
   ],
   controllers: [BicycleCourseController],
   providers: [BicycleCourseService],
+  exports: [BicycleCourseService],
 })
 export class BicycleCourseModule {}

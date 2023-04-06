@@ -6,6 +6,7 @@ import { UserEntity } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/constants';
 import { AuthModule } from 'src/auth/auth.module';
+import { BicycleCourseModule } from 'src/bicycle-course/bicycle-course.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from 'src/auth/auth.module';
     //   signOptions: { expiresIn: '60s' },
     // }),
     AuthModule,
+    BicycleCourseModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

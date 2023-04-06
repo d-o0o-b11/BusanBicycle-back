@@ -53,7 +53,6 @@ export class UsersController {
   @Get('myPage')
   @UseGuards(JwtAuthGuard)
   async getUserPage(@Token() token) {
-    //@Request() req
-    console.log(token);
+    return await this.usersService.myPage(token.id);
   }
 }
