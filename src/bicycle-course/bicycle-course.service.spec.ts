@@ -177,6 +177,11 @@ describe('BicycleCourseService', () => {
   describe('deleteCourseLike', () => {
     const id = 4;
 
+    const UserDummyData = {
+      user_id: 4,
+      course_id: 1,
+    };
+
     it('좋아요 삭제', async () => {
       const courseLikeDelete = jest.spyOn(courseLikeRepository, 'delete');
 
@@ -184,6 +189,15 @@ describe('BicycleCourseService', () => {
 
       expect(courseLikeDelete).toBeCalledTimes(1);
       expect(courseLikeDelete).toBeCalledWith(id);
+    });
+
+    it('좋아요 추가', async () => {
+      const saveResult = jest.spyOn(courseLikeRepository, 'save');
+
+      await service.saveCourseLike(UserDummyData);
+
+      expect(saveResult).toBeCalledTimes(1);
+      expect(saveResult).toBeCalledWith(UserDummyData);
     });
   });
 });
