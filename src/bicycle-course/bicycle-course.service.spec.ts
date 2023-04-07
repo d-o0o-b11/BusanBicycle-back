@@ -200,4 +200,108 @@ describe('BicycleCourseService', () => {
       expect(saveResult).toBeCalledWith(UserDummyData);
     });
   });
+
+  describe('checkCourseFinish', () => {
+    const findDataDummyData = {
+      user_id: 4,
+      course_id: 1,
+      id: 1,
+    };
+
+    const UserDummyData = {
+      user_id: 4,
+      course_id: 1,
+    };
+
+    it('완주 코스 삭제', async () => {
+      const findData = jest
+        .spyOn(courseFinishRepository, 'findOne')
+        .mockResolvedValue(findDataDummyData as any);
+
+      const deleteCourse = jest.spyOn(service, 'deleteFinishCourse');
+      const saveCourse = jest.spyOn(service, 'saveFinishCourse');
+
+      await service.checkCourseFinish(UserDummyData);
+
+      expect(findData).toBeCalledTimes(1);
+      expect(findData).toBeCalledWith({
+        where: {
+          course_id: UserDummyData.course_id,
+          user_id: UserDummyData.user_id,
+        },
+      });
+
+      expect(deleteCourse).toBeCalledTimes(1);
+      expect(saveCourse).toBeCalledTimes(0);
+    });
+
+    it('완주 코스 저장', async () => {
+      const findData = jest
+        .spyOn(courseFinishRepository, 'findOne')
+        .mockResolvedValue(undefined);
+
+      const deleteCourse = jest.spyOn(service, 'deleteFinishCourse');
+      const saveCourse = jest.spyOn(service, 'saveFinishCourse');
+
+      await service.checkCourseFinish(UserDummyData);
+
+      expect(findData).toBeCalledTimes(1);
+      expect(findData).toBeCalledWith({
+        where: {
+          course_id: UserDummyData.course_id,
+          user_id: UserDummyData.user_id,
+        },
+      });
+
+      expect(deleteCourse).toBeCalledTimes(0);
+      expect(saveCourse).toBeCalledTimes(1);
+    });
+  });
+
+  describe('saveFinishCourse', () => {
+    const UserDummyData = {
+      user_id: 4,
+      course_id: 1,
+    };
+
+    const id = 4;
+
+    it('완주 코스 저장', async () => {
+      const result = jest.spyOn(courseFinishRepository, 'save');
+
+      await service.saveFinishCourse(UserDummyData);
+
+      expect(result).toBeCalledTimes(1);
+      expect(result).toBeCalledWith(UserDummyData);
+    });
+
+    it('완주 코스 취소', async () => {
+      const deleteCourse = jest.spyOn(courseFinishRepository, 'delete');
+
+      await service.deleteFinishCourse(id);
+
+      expect(deleteCourse).toBeCalledTimes(1);
+      expect(deleteCourse).toBeCalledWith(id);
+    });
+  });
+
+  describe('getAllFinishCourse', () => {
+    const id = 4;
+
+    it('유저의 완주 목록 출력', async () => {
+      const result = jest.spyOn(courseFinishRepository, 'find');
+
+      await service.getAllFinishCourse(id);
+
+      expect(result).toBeCalledTimes(1);
+      expect(result).toBeCalledWith({
+        where: {
+          user_id: id,
+        },
+        relations: {
+          course: true,
+        },
+      });
+    });
+  });
 });

@@ -142,9 +142,7 @@ export class BicycleCourseService {
    * 완주 취소
    */
   async deleteFinishCourse(id: number) {
-    const result = await this.courseFinishRepository.delete(id);
-
-    return result;
+    return await this.courseFinishRepository.delete(id);
   }
 
   /**
