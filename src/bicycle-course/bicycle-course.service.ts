@@ -101,11 +101,7 @@ export class BicycleCourseService {
    * @returns
    */
   async deleteCourseLike(id: number) {
-    if (id) {
-      return await this.courseLikeRepository.delete(id);
-    } else {
-      return new Error('존재하지 않는 코스 아이디입니다.');
-    }
+    return await this.courseLikeRepository.delete(id);
   }
 
   /**

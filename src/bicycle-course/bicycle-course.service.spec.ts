@@ -173,4 +173,19 @@ describe('BicycleCourseService', () => {
       expect(deleteCourseLike).toBeCalledWith(findDataFirst.id);
     });
   });
+
+  describe('deleteCourseLike', () => {
+    const id = 4;
+
+    const id_None = undefined;
+
+    it('좋아요 삭제', async () => {
+      const courseLikeDelete = jest.spyOn(courseLikeRepository, 'delete');
+
+      await service.deleteCourseLike(id);
+
+      expect(courseLikeDelete).toBeCalledTimes(1);
+      expect(courseLikeDelete).toBeCalledWith(id);
+    });
+  });
 });
