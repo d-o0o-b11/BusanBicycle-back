@@ -177,8 +177,6 @@ describe('BicycleCourseService', () => {
   describe('deleteCourseLike', () => {
     const id = 4;
 
-    const id_None = undefined;
-
     it('좋아요 삭제', async () => {
       const courseLikeDelete = jest.spyOn(courseLikeRepository, 'delete');
 
