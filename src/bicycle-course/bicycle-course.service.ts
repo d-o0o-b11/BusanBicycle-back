@@ -67,10 +67,11 @@ export class BicycleCourseService {
    * @returns ...
    */
   async checkCourseLike(data: UserDto) {
+    // (2, 4), (10, 4)
     const findData = await this.courseLikeRepository.findOne({
       where: {
         course_id: data.course_id,
-        user_id: data.user_id,
+        user_id: data.user_id, // < -- 유니크 제약 제거
       },
     });
 
@@ -163,26 +164,30 @@ export class BicycleCourseService {
     return result;
   }
 
+  /**
+   * 베스트 코스 순으로 출력 (좋아요 순)
+   * @returns 좋아요 높은 순
+   */
   async getBestCourse() {
+    const subQueryBuiilder = this.bicycleCourseRepository
+      .createQueryBuilder()
+      .subQuery()
+      .select('cl.course_id, count(*)')
+      .from(CourseLikeEntity, 'cl')
+      .groupBy('cl.course_id');
+
     const result = await this.bicycleCourseRepository
       .createQueryBuilder('bestcourse')
-      // .leftJoin('bestcourse.like', 'like')
       .select(['bestcourse.*', 'clike.*'])
       .leftJoin(
-        (qb) =>
-          qb
-            .select('cl.course_id, count(*)')
-            .from(CourseLikeEntity, 'cl')
-            .groupBy('cl.course_id'),
+        subQueryBuiilder.getQuery(),
         'clike',
         'bestcourse.id=clike.course_id',
       )
-      // .groupBy('like.course_id');
+      .orderBy('count')
       .getRawMany();
-    // .leftJoinAndSelect('bestcourse.like', 'like')
-    // .where('bestcourse.course_id =1');
 
-    console.log(result);
+    return result;
   }
 }
 

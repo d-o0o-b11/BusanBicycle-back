@@ -3,4 +3,15 @@ export const mockRepository = () => ({
   findOne: jest.fn(),
   find: jest.fn(),
   delete: jest.fn(),
+
+  createQueryBuilder: jest.fn().mockReturnValue({
+    select: jest.fn().mockReturnThis(),
+    leftJoin: jest.fn().mockReturnThis(),
+    subQuery: jest.fn().mockReturnThis(),
+    groupBy: jest.fn().mockReturnThis(),
+    from: jest.fn().mockReturnThis(),
+    orderBy: jest.fn().mockReturnThis(),
+    getQuery: jest.fn().mockReturnThis(),
+    getRawMany: jest.fn().mockReturnThis(),
+  }),
 });

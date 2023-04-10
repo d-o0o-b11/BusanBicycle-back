@@ -304,4 +304,62 @@ describe('BicycleCourseService', () => {
       });
     });
   });
+
+  describe('getBestCourse', () => {
+    it('베스트 코스 순으로 출력', async () => {
+      const subSelect = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'select',
+      );
+
+      const subFrom = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'from',
+      );
+
+      const subGroupBy = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'groupBy',
+      );
+
+      const subGetQuery = jest
+        .spyOn(bicycleCourseRepository.createQueryBuilder(), 'getQuery')
+        .mockReturnValue('TEST SUB QUERY');
+
+      const select = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'select',
+      );
+
+      const leftJoin = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'leftJoin',
+      );
+
+      const orderBy = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'orderBy',
+      );
+
+      const getRawMany = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'getRawMany',
+      );
+
+      await service.getBestCourse();
+
+      expect(subSelect).toBeCalledWith('cl.course_id, count(*)');
+      expect(subFrom).toBeCalledWith(CourseLikeEntity, 'cl');
+      expect(subGroupBy).toBeCalledWith('cl.course_id');
+
+      expect(select).toBeCalledWith(['bestcourse.*', 'clike.*']);
+      expect(leftJoin).toBeCalledWith(
+        'TEST SUB QUERY',
+        'clike',
+        'bestcourse.id=clike.course_id',
+      );
+      expect(orderBy).toBeCalledWith('count');
+      expect(getRawMany).toBeCalledWith();
+    });
+  });
 });
