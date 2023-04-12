@@ -31,7 +31,7 @@ export class BicycleCourseService {
   ) {
     const saveResult = createBicycleCourseDto.map((idx) => {
       const entity = new BicycleCourseEntity();
-      entity.gugunNm = idx.gugunNm;
+      entity.gugunnm = idx.gugunNm;
       entity.gugunWithWalk = idx.gugunWithWalk;
       entity.startSpot = idx.startSpot;
       entity.endSpot = idx.endSpot;
@@ -189,15 +189,24 @@ export class BicycleCourseService {
 
     return result;
   }
-}
-
-/**
+  /**
  * select *
-from bicycle_course bc 
-left join(
-	select course_id, count(course_id)
-	from course_like cl 
-	group by course_id
-) as clike
-on id=clike.course_id
+  from bicycle_course bc 
+  left join(
+    select course_id, count(course_id)
+    from course_like cl 
+    group by course_id
+  ) as clike
+  on id=clike.course_id
  */
+
+  async findAllCourse(local: string) {
+    const findCourse = await this.bicycleCourseRepository
+      .createQueryBuilder()
+      .select('*')
+      .where('gugunnm like :local', { local: `%${local}%` })
+      .getRawMany();
+
+    return findCourse;
+  }
+}

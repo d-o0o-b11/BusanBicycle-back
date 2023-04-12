@@ -7,6 +7,7 @@ import {
   InternalServerErrorException,
   Patch,
   Delete,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtStrategy } from 'src/auth/strategies/jwtToken.strategy';
@@ -68,5 +69,10 @@ export class BicycleCourseController {
   @Get('bestCourse')
   async getBestCourse() {
     return await this.bicycleCourseService.getBestCourse();
+  }
+
+  @Get('find_course/:local')
+  async findCourse(@Param('local') local: string) {
+    return await this.bicycleCourseService.findAllCourse(local);
   }
 }
