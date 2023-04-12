@@ -72,7 +72,7 @@ export class BicycleCourseController {
   }
 
   @Get('find_course/:local')
-  async findCourse(@Param('local') local: string) {
-    return await this.bicycleCourseService.findAllCourse(local);
+  async findCourse(@Param('local') local: string, @Body() data) {
+    return await this.bicycleCourseService.findAllCourse(local, data.user_id);
   }
 }

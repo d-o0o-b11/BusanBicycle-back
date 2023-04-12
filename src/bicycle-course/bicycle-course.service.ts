@@ -200,13 +200,45 @@ export class BicycleCourseService {
   on id=clike.course_id
  */
 
-  async findAllCourse(local: string) {
+  /**
+   *
+   * @param local
+   * @param user_id
+   * @returns 모든 코스, 완주한 코스id, 좋아요 누른 코스 id
+   */
+  async findAllCourse(local: string, user_id?: number) {
     const findCourse = await this.bicycleCourseRepository
       .createQueryBuilder()
       .select('*')
       .where('gugunnm like :local', { local: `%${local}%` })
       .getRawMany();
 
-    return findCourse;
+    if (user_id) {
+      const finish_course = await this.courseFinishRepository.find({
+        where: {
+          user_id: user_id,
+        },
+        order: {
+          course_id: 'asc',
+        },
+      });
+
+      const like_course = await this.courseLikeRepository.find({
+        where: {
+          user_id: user_id,
+        },
+        order: {
+          course_id: 'asc',
+        },
+      });
+
+      return [
+        findCourse,
+        finish_course.map((e) => e.course_id),
+        like_course.map((e) => e.course_id),
+      ];
+    } else {
+      return findCourse;
+    }
   }
 }
