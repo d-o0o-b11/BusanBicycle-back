@@ -21,6 +21,11 @@ export class BicycleCourseService {
     private readonly courseFinishRepository: Repository<CourseFinishEntity>,
   ) {}
 
+  /**
+   * 코스 데이터 한번에 저장하기 위한 api
+   * @param createBicycleCourseDto
+   * @returns 저장 성공
+   */
   async saveBicycleCourseData(
     createBicycleCourseDto: CreateBicycleCourseDto[],
   ) {
@@ -39,6 +44,10 @@ export class BicycleCourseService {
     return '저장 성공';
   }
 
+  /**
+   *
+   * @returns 모든 코스 데이터 출력
+   */
   async findAllBicycleCourseData() {
     const result = await this.bicycleCourseRepository.find({
       relations: {
@@ -49,32 +58,20 @@ export class BicycleCourseService {
       },
     });
 
-    // const like = await this.courseLikeRepository.count();
-    // console.log('좋아요', like);
-
-    // const test = result.map((n) => {
-    //   n.gugunNm, n.startSpot, n.endSpot, n.like;
-    // });
-
-    // const test = await this.bicycleCourseRepository.createQueryBuilder
-    /**
-     * select count(*)
-      from bicycle_course bc 
-      left join course_like cl 
-      on bc.id =cl.course_id
-      group by bc.id
-      order by bc.id asc
-
-     */
-
     return result;
   }
 
+  /**
+   * 좋아요 기능
+   * @param data 유저 id, 코스 id
+   * @returns ...
+   */
   async checkCourseLike(data: UserDto) {
+    // (2, 4), (10, 4)
     const findData = await this.courseLikeRepository.findOne({
       where: {
         course_id: data.course_id,
-        user_id: data.user_id,
+        user_id: data.user_id, // < -- 유니크 제약 제거
       },
     });
 
@@ -105,11 +102,7 @@ export class BicycleCourseService {
    * @returns
    */
   async deleteCourseLike(id: number) {
-    if (id) {
-      return await this.courseLikeRepository.delete(id);
-    } else {
-      return new Error('존재하지 않는 코스 아이디입니다.');
-    }
+    return await this.courseLikeRepository.delete(id);
   }
 
   /**
@@ -150,9 +143,7 @@ export class BicycleCourseService {
    * 완주 취소
    */
   async deleteFinishCourse(id: number) {
-    const result = await this.courseFinishRepository.delete(id);
-
-    return result;
+    return await this.courseFinishRepository.delete(id);
   }
 
   /**
@@ -173,26 +164,30 @@ export class BicycleCourseService {
     return result;
   }
 
+  /**
+   * 베스트 코스 순으로 출력 (좋아요 순)
+   * @returns 좋아요 높은 순
+   */
   async getBestCourse() {
+    const subQueryBuiilder = this.bicycleCourseRepository
+      .createQueryBuilder()
+      .subQuery()
+      .select('cl.course_id, count(*)')
+      .from(CourseLikeEntity, 'cl')
+      .groupBy('cl.course_id');
+
     const result = await this.bicycleCourseRepository
       .createQueryBuilder('bestcourse')
-      // .leftJoin('bestcourse.like', 'like')
       .select(['bestcourse.*', 'clike.*'])
       .leftJoin(
-        (qb) =>
-          qb
-            .select('cl.course_id, count(*)')
-            .from(CourseLikeEntity, 'cl')
-            .groupBy('cl.course_id'),
+        subQueryBuiilder.getQuery(),
         'clike',
         'bestcourse.id=clike.course_id',
       )
-      // .groupBy('like.course_id');
+      .orderBy('count')
       .getRawMany();
-    // .leftJoinAndSelect('bestcourse.like', 'like')
-    // .where('bestcourse.course_id =1');
 
-    console.log(result);
+    return result;
   }
 }
 

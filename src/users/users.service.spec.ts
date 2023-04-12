@@ -7,11 +7,14 @@ import { UsersService } from './users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { NotFoundException } from '@nestjs/common';
+import { BicycleCourseService } from 'src/bicycle-course/bicycle-course.service';
+import { CourseFinishEntity } from 'src/bicycle-course/entities/course-finish.entity';
 
 describe('UsersService', () => {
   let service: UsersService;
   let userRepository: Repository<UserEntity>;
   let jwtService: JwtService;
+  let bicycleService: BicycleCourseService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -27,6 +30,12 @@ describe('UsersService', () => {
             sign: jest.fn(),
           },
         },
+        {
+          provide: BicycleCourseService,
+          useValue: {
+            getAllFinishCourse: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -35,6 +44,7 @@ describe('UsersService', () => {
       getRepositoryToken(UserEntity),
     );
     jwtService = module.get<JwtService>(JwtService);
+    bicycleService = module.get<BicycleCourseService>(BicycleCourseService);
   });
 
   it('should be defined', () => {
@@ -64,7 +74,7 @@ describe('UsersService', () => {
     it('아이디 중복 체크 true', async () => {
       const saveResult = jest
         .spyOn(userRepository, 'save')
-        .mockResolvedValue({ ...dummyDateTrue, id: 1 });
+        .mockResolvedValue({ ...dummyDateTrue, id: 1 } as any);
       await service.signup(dummyDateTrue);
 
       expect(saveResult).toBeCalledTimes(1);
@@ -101,7 +111,7 @@ describe('UsersService', () => {
         user_id: '11',
         user_pw: '12',
         check: true,
-      });
+      } as any);
 
       await expect(async () => service.login(dummyData)).rejects.toThrowError(
         new NotFoundException('비밀번호가 틀렸습니다.'),
@@ -118,7 +128,7 @@ describe('UsersService', () => {
         user_id: '11',
         user_pw: '11',
         check: true,
-      });
+      } as any);
 
       const token = jest.spyOn(jwtService, 'sign');
       await service.login(dummyData);
@@ -135,7 +145,7 @@ describe('UsersService', () => {
       user_id: '11',
       user_pw: '11',
       check: true,
-    };
+    } as any;
 
     it('중복된 아이디인 경우', async () => {
       const result = jest
@@ -165,6 +175,38 @@ describe('UsersService', () => {
           user_id: user_id,
         },
       });
+    });
+  });
+
+  describe('myPage', () => {
+    const finishDummyData = [
+      {
+        id: 8,
+        user_id: 4,
+        course_id: 2,
+        finish_date: '2023-04-06T05:40:37.627Z',
+        course: {
+          id: 2,
+          gugunNm: '부산광역시 해운대구',
+          gugunWithWalk: '1.84',
+          startSpot: '우동 1500',
+          endSpot: '우동 1430',
+          total: '1.84',
+        },
+      },
+    ];
+
+    const id = 8;
+
+    it('완주한 코스 출력', async () => {
+      const course_finsh = jest
+        .spyOn(bicycleService, 'getAllFinishCourse')
+        .mockResolvedValue(finishDummyData as any);
+
+      await service.myPage(id);
+
+      expect(course_finsh).toBeCalledTimes(1);
+      expect(course_finsh).toBeCalledWith(id);
     });
   });
 });
