@@ -15,7 +15,7 @@ export class BicycleCourseEntity {
   id: number;
 
   @Column('varchar')
-  gugunNm: string;
+  gugunnm: string;
 
   @Column('varchar')
   gugunWithWalk: string;

@@ -187,7 +187,7 @@ describe('UsersService', () => {
         finish_date: '2023-04-06T05:40:37.627Z',
         course: {
           id: 2,
-          gugunNm: '부산광역시 해운대구',
+          gugunnm: '부산광역시 해운대구',
           gugunWithWalk: '1.84',
           startSpot: '우동 1500',
           endSpot: '우동 1430',
