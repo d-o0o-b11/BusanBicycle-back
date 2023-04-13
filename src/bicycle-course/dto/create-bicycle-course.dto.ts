@@ -7,7 +7,7 @@ export class CreateBicycleCourseDto {
     example: '구군명',
     description: '부산광역시 해운대구',
   })
-  gugunNm: string;
+  gugunnm: string;
 
   @IsString()
   @ApiProperty({

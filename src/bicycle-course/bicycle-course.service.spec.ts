@@ -52,13 +52,13 @@ describe('BicycleCourseService', () => {
   describe('saveBicycleCourseData', () => {
     const saveResultDummyData = [
       {
-        gugunNm: '부산광역시 해운대구',
+        gugunnm: '부산광역시 해운대구',
         gugunWithWalk: '2.56',
         startSpot: '우동 1413-5',
         endSpot: '우동 1544',
         total: '2.56',
       },
-    ];
+    ] as any;
 
     it('코스 데이터 한번에 저장', async () => {
       const saveResult = jest.spyOn(bicycleCourseRepository, 'save');
@@ -359,6 +359,124 @@ describe('BicycleCourseService', () => {
         'bestcourse.id=clike.course_id',
       );
       expect(orderBy).toBeCalledWith('count');
+      expect(getRawMany).toBeCalledWith();
+    });
+  });
+
+  describe('findAllCourse', () => {
+    const local = '해운대';
+    const user_id = 4;
+    const finishDummyData = [{ course_id: 2 }, { course_id: 10 }];
+
+    const likeDummyData = [{ course_id: 2 }, { course_id: 10 }];
+    it('코스 검색 쿼리빌더/로그인', async () => {
+      const select = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'select',
+      );
+
+      const where = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'where',
+      );
+
+      const getRawMany = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'getRawMany',
+      );
+
+      const finish_course = jest
+        .spyOn(courseFinishRepository, 'find')
+        .mockResolvedValue(finishDummyData as any);
+
+      const like_course = jest
+        .spyOn(courseLikeRepository, 'find')
+        .mockResolvedValue(likeDummyData as any);
+
+      const result = await service.findAllCourse(local, user_id);
+
+      expect(select).toBeCalledTimes(1);
+      expect(select).toBeCalledWith('*');
+
+      expect(where).toBeCalledTimes(1);
+      expect(where).toBeCalledWith('gugunnm like :local', {
+        local: `%${local}%`,
+      });
+
+      expect(getRawMany).toBeCalledTimes(1);
+      expect(getRawMany).toBeCalledWith();
+
+      expect(finish_course).toBeCalledWith({
+        where: {
+          user_id: user_id,
+        },
+        order: {
+          course_id: 'asc',
+        },
+      });
+
+      expect(like_course).toBeCalledWith({
+        where: {
+          user_id: user_id,
+        },
+        order: {
+          course_id: 'asc',
+        },
+      });
+
+      // expect(result).toStrictEqual([
+      //   [
+      //     {
+      //       id: 10,
+      //       gugunnm: '부산광역시 해운대구',
+      //       startSpot: '중동 899',
+      //       endSpot: '좌동 1427-2',
+      //       gugunWithWalk: '1.95',
+      //       total: '1.95',
+      //       course_id: 10,
+      //       count: '1',
+      //     },
+      //   ],
+      //   finishDummyData.map((e) => e.course_id),
+      //   likeDummyData.map((e) => e.course_id),
+      // ]);
+
+      // expect(finish_course).toBeCalledTimes(finishDummyData.length);
+      // finishDummyData.forEach((each) =>
+      //   expect(finish_course).toBeCalledWith(each),
+      // );
+
+      // expect(like_course).toBeCalledTimes(likeDummyData.length);
+      // likeDummyData.forEach((each) => expect(like_course).toBeCalledWith(each));
+    });
+
+    it('코스 검색 쿼리빌더/비로그인', async () => {
+      const select = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'select',
+      );
+
+      const where = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'where',
+      );
+
+      const getRawMany = jest.spyOn(
+        bicycleCourseRepository.createQueryBuilder(),
+        'getRawMany',
+      );
+
+      await service.findAllCourse(local);
+
+      expect(select).toBeCalledTimes(1);
+      expect(select).toBeCalledWith('*');
+
+      expect(where).toBeCalledTimes(1);
+      expect(where).toBeCalledWith('gugunnm like :local', {
+        local: `%${local}%`,
+      });
+
+      expect(getRawMany).toBeCalledTimes(1);
       expect(getRawMany).toBeCalledWith();
     });
   });

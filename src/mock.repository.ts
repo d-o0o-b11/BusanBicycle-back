@@ -13,5 +13,6 @@ export const mockRepository = () => ({
     orderBy: jest.fn().mockReturnThis(),
     getQuery: jest.fn().mockReturnThis(),
     getRawMany: jest.fn().mockReturnThis(),
+    where: jest.fn().mockReturnThis(),
   }),
 });

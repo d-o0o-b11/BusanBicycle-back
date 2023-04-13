@@ -31,7 +31,7 @@ export class BicycleCourseService {
   ) {
     const saveResult = createBicycleCourseDto.map((idx) => {
       const entity = new BicycleCourseEntity();
-      entity.gugunnm = idx.gugunNm;
+      entity.gugunnm = idx.gugunnm;
       entity.gugunWithWalk = idx.gugunWithWalk;
       entity.startSpot = idx.startSpot;
       entity.endSpot = idx.endSpot;
