@@ -11,6 +11,7 @@ import { CourseLikeEntity } from './bicycle-course/entities/course-like.entity';
 import { CourseFinishEntity } from './bicycle-course/entities/course-finish.entity';
 import { JwtStrategy } from './auth/strategies/jwtToken.strategy';
 import { typeORMConfig } from './configs/typeorm.config';
+import { BicycleAirModule } from './bicycle-air/bicycle-air.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { typeORMConfig } from './configs/typeorm.config';
     UsersModule,
     AuthModule,
     BicycleCourseModule,
+    BicycleAirModule,
   ],
   controllers: [AppController],
   providers: [AppService],
