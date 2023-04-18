@@ -12,35 +12,19 @@ import { CourseFinishEntity } from './bicycle-course/entities/course-finish.enti
 import { JwtStrategy } from './auth/strategies/jwtToken.strategy';
 import { typeORMConfig } from './configs/typeorm.config';
 import { BicycleAirModule } from './bicycle-air/bicycle-air.module';
+import { AutomapperModule } from '@automapper/nestjs';
+import { classes } from '@automapper/classes';
 
 @Module({
   imports: [
-    // TypeOrmModule.forRoot({
-    //   type: 'postgres',
-    //   host: 'DataBase',
-    //   port: 5432,
-    //   username: 'test',
-    //   password: '1234',
-    //   database: 'postgres',
-    //   // extra: {
-    //   //   ssl: {
-    //   //     rejectUnauthorized: false,
-    //   //   },
-    //   // },
-    //   synchronize: true,
-    //   entities: [
-    //     // UserEntity,
-    //     // BicycleCourseEntity,
-    //     // CourseLikeEntity,
-    //     // CourseFinishEntity,
-    //     __dirname + './**/**/*.entity{.ts}',
-    //   ],
-    // }),
     TypeOrmModule.forRoot(typeORMConfig),
     UsersModule,
     AuthModule,
     BicycleCourseModule,
     BicycleAirModule,
+    AutomapperModule.forRoot({
+      strategyInitializer: classes(),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

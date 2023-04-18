@@ -1,26 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBicycleAirDto } from './dto/create-bicycle-air.dto';
-import { UpdateBicycleAirDto } from './dto/update-bicycle-air.dto';
+import { InjectMapper } from '@automapper/nestjs';
+import { BicycleAirEntity } from './entities/bicycle-air.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Mapper } from '@automapper/core';
 
 @Injectable()
 export class BicycleAirService {
-  create(createBicycleAirDto: CreateBicycleAirDto) {
-    return 'This action adds a new bicycleAir';
-  }
+  constructor(
+    @InjectRepository(BicycleAirEntity)
+    private readonly bicycleAirRepository: Repository<BicycleAirEntity>,
 
-  findAll() {
-    return `This action returns all bicycleAir`;
-  }
+    @InjectMapper() private readonly mapper: Mapper,
+  ) {}
 
-  findOne(id: number) {
-    return `This action returns a #${id} bicycleAir`;
-  }
+  async saveAirStaion(dto: CreateBicycleAirDto) {
+    const entity = this.mapper.map(dto, CreateBicycleAirDto, BicycleAirEntity);
 
-  update(id: number, updateBicycleAirDto: UpdateBicycleAirDto) {
-    return `This action updates a #${id} bicycleAir`;
-  }
+    const saveResult = await this.bicycleAirRepository.save(entity);
 
-  remove(id: number) {
-    return `This action removes a #${id} bicycleAir`;
+    return saveResult;
   }
 }

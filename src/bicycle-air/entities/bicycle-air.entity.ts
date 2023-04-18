@@ -11,8 +11,8 @@ export class BicycleAirEntity {
   @Column({ type: 'varchar' })
   pumpgubun: string;
 
-  @Column({ type: 'int4' })
-  pumpsetcost: number;
+  @Column({ type: 'varchar' })
+  pumpsetcost: string;
 
   @Column({ type: 'text' })
   spot: string;
