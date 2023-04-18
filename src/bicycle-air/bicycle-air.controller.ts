@@ -1,6 +1,4 @@
-import { MapInterceptor } from '@automapper/nestjs';
-import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
-import { BicycleAirEntity } from './entities/bicycle-air.entity';
+import { Body, Controller, Post } from '@nestjs/common';
 import { CreateBicycleAirDto } from './dto/create-bicycle-air.dto';
 import { BicycleAirService } from './bicycle-air.service';
 
@@ -10,6 +8,6 @@ export class BicycleAirController {
 
   @Post()
   async bicycleAirStation(@Body() dto: CreateBicycleAirDto[]) {
-    return await this.bicycleAirService.saveAirStaion(dto);
+    return await this.bicycleAirService.saveAirStation(dto);
   }
 }
