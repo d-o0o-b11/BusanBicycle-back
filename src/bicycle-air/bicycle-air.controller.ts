@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { CreateBicycleAirDto } from './dto/create-bicycle-air.dto';
 import { BicycleAirService } from './bicycle-air.service';
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('공기 주입소 api')
 @Controller('bicycle-air')
