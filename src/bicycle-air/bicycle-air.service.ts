@@ -15,8 +15,12 @@ export class BicycleAirService {
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
-  async saveAirStaion(dto: CreateBicycleAirDto) {
-    const entity = this.mapper.map(dto, CreateBicycleAirDto, BicycleAirEntity);
+  async saveAirStaion(dto: CreateBicycleAirDto[]) {
+    const entity = this.mapper.mapArray(
+      dto,
+      CreateBicycleAirDto,
+      BicycleAirEntity,
+    );
 
     const saveResult = await this.bicycleAirRepository.save(entity);
 
