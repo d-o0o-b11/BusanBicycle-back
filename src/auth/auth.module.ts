@@ -8,7 +8,6 @@ import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
-    // PassportModule.register({ defaultStrategy: 'jwt' }),
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
@@ -20,47 +19,3 @@ import { PassportModule } from '@nestjs/passport';
   exports: [JwtStrategy, PassportModule, JwtModule],
 })
 export class AuthModule {}
-
-// PassportModule,
-//     GroomerJwtStrategy,
-//     NoneGroomerJwtStrategy,
-//     JwtModule,
-
-/**
- * @Module({
-  imports: [
-    PassportModule,
-
-    JwtModule.registerAsync({
-      imports: [ServerConfigModule],
-      useFactory: (appConfigService: AppConfigService) => ({
-        secret: appConfigService.jwtSecret,
-      }),
-      inject: [AppConfigService],
-    }),
-
-    HttpModule,
-    UserModule,
-    ServerConfigModule,
-  ],
-  controllers: [AuthenticationController],
-  providers: [
-    JwtStrategy,
-    NoneJwtStrategy,
-    {
-      provide: AUTHENTICATION_SERVICE_TOKEN,
-      useClass: AuthenticationService,
-    },
-    {
-      provide: KAKAO_AUTHENTICATION_SERVICE_TOKEN,
-      useClass: KakaoAuthenticationService,
-    },
-  ],
-  exports: [
-    PassportModule,
-    JwtStrategy,
-    NoneJwtStrategy,
-    JwtModule,
-  ],
-})
- */
