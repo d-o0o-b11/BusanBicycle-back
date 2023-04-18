@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BicycleAirService } from './bicycle-air.service';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { BicycleAirEntity } from './entities/bicycle-air.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { mockRepository } from 'src/mock.repository';
@@ -69,6 +69,42 @@ describe('BicycleAirService', () => {
 
       expect(saveResult).toBeCalledTimes(1);
       expect(saveResult).toBeCalledWith(entity);
+    });
+  });
+
+  describe('findAirStation', () => {
+    const findDummyData = [
+      {
+        id: 4,
+        gugun: '부산광역시 해운대구',
+        pumpgubun: '태양광',
+        pumpsetcost: '1730000',
+        spot: '지하철 장산역 5번 출구 주변',
+      },
+      {
+        id: 5,
+        gugun: '부산광역시 해운대구',
+        pumpgubun: '태양광',
+        pumpsetcost: '1730000',
+        spot: '지하철 영산대역 2번 출구',
+      },
+    ];
+
+    it('공기 주입소 검색 기능', async () => {
+      const local = '해운대';
+
+      const findResult = jest
+        .spyOn(bicycleAirRepository, 'find')
+        .mockResolvedValue(findDummyData);
+
+      await service.findAirStation(local);
+
+      expect(findResult).toBeCalledTimes(1);
+      expect(findResult).toBeCalledWith({
+        where: {
+          gugun: Like(`%${local}%`),
+        },
+      });
     });
   });
 });
