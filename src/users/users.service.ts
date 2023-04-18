@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { BicycleCourseService } from 'src/bicycle-course/bicycle-course.service';
+import { LoginDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -31,7 +32,7 @@ export class UsersService {
     return saveResult;
   }
 
-  async login(data: CreateUserDto) {
+  async login(data: LoginDto) {
     const result = await this.userRepository.findOne({
       where: { user_id: data.user_id },
     });

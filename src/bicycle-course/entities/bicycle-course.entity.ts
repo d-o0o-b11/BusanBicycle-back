@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CourseFinishEntity } from './course-finish.entity';
 import { CourseLikeEntity } from './course-like.entity';
 import { ApiProperty } from '@nestjs/swagger';
