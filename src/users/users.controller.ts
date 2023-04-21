@@ -22,6 +22,7 @@ import {
 } from '@nestjs/swagger';
 import { USER_JWT } from './user-jwt.const';
 import { LoginDto } from './dto/login-user.dto';
+import { JwtToken } from 'src/auth/jwt-token.dto';
 
 @ApiTags('유저 api')
 @Controller('users')
@@ -78,7 +79,7 @@ export class UsersController {
   })
   @Get('myPage')
   @UseGuards(JwtAuthGuard)
-  async getUserPage(@Token() token) {
+  async getUserPage(@Token() token: JwtToken) {
     return await this.usersService.myPage(token.id);
   }
 }

@@ -65,6 +65,8 @@ export class UsersService {
       },
     });
 
+    console.log(this.jwtService.sign({ id: '30' }));
+
     if (result) throw new NotFoundException('중복된 아이디입니다.');
 
     return 'true';

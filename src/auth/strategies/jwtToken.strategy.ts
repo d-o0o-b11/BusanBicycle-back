@@ -1,12 +1,12 @@
 // import { Strategy } from 'passport-custom';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { JwtToken } from '../jwt-token.interface';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { jwtConstants } from '../constants';
+import { plainToClass } from 'class-transformer';
+import { IsNumber, IsString, validate } from 'class-validator';
+import { JwtToken } from '../jwt-token.dto';
 
-// }
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor() {
@@ -18,31 +18,19 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: any) {
-    if (!payload) {
+    console.log('dfsdf', payload);
+
+    // const errors = await validate(object);
+
+    const object = plainToClass(JwtToken, payload);
+    const errors = await validate(object);
+    console.log(errors);
+    if (errors.length > 0) {
       const unAuthorizedException = new UnauthorizedException(
-        'Jwt TOken이 없어 인증이 실패하였습니다.',
+        'Jwt Token 인증이 실패하였습니다.',
       );
       throw unAuthorizedException;
     }
     return { id: payload.id, user_id: payload.user_id };
   }
 }
-
-/**
- *  const token = String(req.headers['authorization']).split('Bearer ')[1];
-
-    const payload: GroomerJwtToken = this.jwtService.decode(
-      token,
-    ) as GroomerJwtToken;
-
-    if (!payload || !payload.groomer || !payload.id) {
-      const unAuthorizedException = new UnauthorizedException(
-        'Groomer Jwt Token 이 없어 인증이 실패하였습니다.',
-        req.url,
-      );
-
-      throw unAuthorizedException;
-    }
-
-    return payload;
- */
