@@ -77,4 +77,16 @@ export class UsersService {
 
     return course_finsh;
   }
+
+  async deleteUserInfo(id: number) {
+    const deleteReslt = await this.userRepository.delete({
+      id: id,
+    });
+
+    if (deleteReslt.affected > 0) {
+      return '회원 탈퇴 성공';
+    } else if (deleteReslt.affected == 0) {
+      throw new Error('회원 탈퇴 실패');
+    }
+  }
 }

@@ -8,6 +8,7 @@ import {
   UseGuards,
   HttpStatus,
   Query,
+  Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,6 +18,7 @@ import { Token } from 'src/auth/decorator/auth.decorator';
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -81,5 +83,31 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   async getUserPage(@Token() token: JwtToken) {
     return await this.usersService.myPage(token.id);
+  }
+
+  @ApiOperation({
+    summary: '회원 탈퇴',
+  })
+  @ApiBearerAuth('access-token')
+  @ApiUnauthorizedResponse({
+    description: 'Jwt 인가 실패',
+    status: HttpStatus.UNAUTHORIZED,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '회원 탈퇴 성공',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: '회원 탈퇴 실패',
+  })
+  @Delete()
+  @UseGuards(JwtAuthGuard)
+  async deleteUser(@Token() token: JwtToken) {
+    try {
+      return await this.usersService.deleteUserInfo(token.id);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }

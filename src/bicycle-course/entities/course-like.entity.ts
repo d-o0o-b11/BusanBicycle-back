@@ -19,11 +19,11 @@ export class CourseLikeEntity {
   @Column('int4')
   course_id: number;
 
-  @ManyToOne(() => BicycleCourseEntity)
+  @ManyToOne(() => BicycleCourseEntity, { cascade: true })
   @JoinColumn({ name: 'course_id' })
   course: BicycleCourseEntity;
 
-  @OneToOne(() => UserEntity)
+  @OneToOne(() => UserEntity, { cascade: true })
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 }
