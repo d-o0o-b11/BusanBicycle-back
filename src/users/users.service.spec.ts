@@ -209,4 +209,43 @@ describe('UsersService', () => {
       expect(course_finsh).toBeCalledWith(id);
     });
   });
+
+  describe('deleteUserInfo', () => {
+    const id = 11;
+
+    const deleteOk = {
+      raw: [],
+      affected: 1,
+    };
+
+    const deleteFail = {
+      raw: [],
+      affected: 0,
+    };
+
+    it('회원 탛퇴 성공', async () => {
+      const deleteReslt = jest
+        .spyOn(userRepository, 'delete')
+        .mockResolvedValue(deleteOk);
+
+      await service.deleteUserInfo(id);
+
+      expect(deleteReslt).toBeCalledTimes(1);
+      expect(deleteReslt).toBeCalledWith({
+        id: id,
+      });
+    });
+
+    it('회원 탈퇴 실패', async () => {
+      const deleteReslt = jest
+        .spyOn(userRepository, 'delete')
+        .mockResolvedValue(deleteFail);
+
+      await expect(
+        async () => await service.deleteUserInfo(id),
+      ).rejects.toThrowError(new Error('회원 탈퇴 실패'));
+
+      expect(deleteReslt).toBeCalledTimes(1);
+    });
+  });
 });
