@@ -10,5 +10,7 @@ COPY . .
 
 RUN yarn build
 
-# CMD [ "node", "dist/main" ]
+EXPOSE 3001
+
+CMD [ "node", "dist/main" ]
 

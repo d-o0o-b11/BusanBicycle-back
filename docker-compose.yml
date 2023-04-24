@@ -4,7 +4,7 @@ version: '3.7'
 services:
   postgres-container:
     container_name: DataBase
-    image: postgres:13.3
+    image: postgres:latest
     ports:
       - 5432:5432
     environment:
