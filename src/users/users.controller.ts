@@ -23,7 +23,6 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { USER_JWT } from './user-jwt.const';
 import { LoginDto } from './dto/login-user.dto';
 import { JwtToken } from 'src/auth/jwt-token.dto';
 
@@ -67,18 +66,6 @@ export class UsersController {
   async checkUserId(@Query('user_id') user_id: string) {
     try {
       return await this.usersService.checkUserId(user_id);
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-  }
-
-  @ApiOperation({
-    summary: '이메일 인증 보내기',
-  })
-  @Post(':email')
-  async checkEmail(@Param('email') email: string) {
-    try {
-      return await this.usersService.mailchck(email);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

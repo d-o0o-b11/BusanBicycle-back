@@ -6,7 +6,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { BicycleCourseService } from 'src/bicycle-course/bicycle-course.service';
 import { LoginDto } from './dto/login-user.dto';
-import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +14,6 @@ export class UsersService {
     private readonly userRepository: Repository<UserEntity>,
     private jwtService: JwtService,
     private readonly bicycleService: BicycleCourseService,
-    private readonly emailService: EmailService,
   ) {}
 
   async signup(data: CreateUserDto) {

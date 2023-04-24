@@ -2,7 +2,7 @@ import { CourseFinishEntity } from 'src/bicycle-course/entities/course-finish.en
 import { CourseLikeEntity } from 'src/bicycle-course/entities/course-like.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('User')
+@Entity('user')
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
