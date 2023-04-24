@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/constants';
 import { AuthModule } from 'src/auth/auth.module';
 import { BicycleCourseModule } from 'src/bicycle-course/bicycle-course.module';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { BicycleCourseModule } from 'src/bicycle-course/bicycle-course.module';
     // }),
     AuthModule,
     BicycleCourseModule,
+    EmailModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

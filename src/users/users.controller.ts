@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Query,
   Delete,
+  Param,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -66,6 +67,18 @@ export class UsersController {
   async checkUserId(@Query('user_id') user_id: string) {
     try {
       return await this.usersService.checkUserId(user_id);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  @ApiOperation({
+    summary: '이메일 인증 보내기',
+  })
+  @Post(':email')
+  async checkEmail(@Param('email') email: string) {
+    try {
+      return await this.usersService.mailchck(email);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

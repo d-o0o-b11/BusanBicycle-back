@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { BicycleCourseService } from 'src/bicycle-course/bicycle-course.service';
 import { LoginDto } from './dto/login-user.dto';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class UsersService {
@@ -14,11 +15,16 @@ export class UsersService {
     private readonly userRepository: Repository<UserEntity>,
     private jwtService: JwtService,
     private readonly bicycleService: BicycleCourseService,
+    private readonly emailService: EmailService,
   ) {}
 
   async signup(data: CreateUserDto) {
     if (!data.check) {
-      throw new Error('아이디 중복 체크해주세요');
+      throw new Error('아이디 중복 체크해주세요!');
+    }
+
+    if (!data.email_check) {
+      throw new Error('이메일 인증해주세요!');
     }
 
     const entity = new UserEntity();
@@ -26,10 +32,23 @@ export class UsersService {
     entity.user_id = data.user_id;
     entity.user_pw = data.user_pw;
     entity.check = data.check;
+    entity.email = data.email;
+    entity.email_check = data.email_check;
 
     const saveResult = await this.userRepository.save(entity);
 
     return saveResult;
+  }
+
+  async mailchck(email: string) {
+    // const mailcheck = await this.emailService.sendMail(email);
+
+    // if (mailcheck === randomNum) {
+    //   return true;
+    // } else {
+    //   throw new Error('인증번호가 틀렸습니다.');
+    // }
+    console.log(email);
   }
 
   async login(data: LoginDto) {

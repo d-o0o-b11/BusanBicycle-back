@@ -13,8 +13,14 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 30 })
   user_pw: string;
 
+  @Column({ type: 'varchar', length: 30 })
+  email: string;
+
   @Column({ type: 'bool', default: false })
   check: boolean;
+
+  @Column({ type: 'bool', default: false })
+  email_check: boolean;
 
   @OneToOne(() => CourseLikeEntity, (c) => c.user)
   like: CourseLikeEntity;
