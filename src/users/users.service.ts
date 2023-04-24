@@ -18,7 +18,11 @@ export class UsersService {
 
   async signup(data: CreateUserDto) {
     if (!data.check) {
-      throw new Error('아이디 중복 체크해주세요');
+      throw new Error('아이디 중복 체크해주세요!');
+    }
+
+    if (!data.email_check) {
+      throw new Error('이메일 인증해주세요!');
     }
 
     const entity = new UserEntity();
@@ -26,6 +30,8 @@ export class UsersService {
     entity.user_id = data.user_id;
     entity.user_pw = data.user_pw;
     entity.check = data.check;
+    entity.email = data.email;
+    entity.email_check = data.email_check;
 
     const saveResult = await this.userRepository.save(entity);
 
@@ -65,8 +71,6 @@ export class UsersService {
       },
     });
 
-    console.log(this.jwtService.sign({ id: '30' }));
-
     if (result) throw new NotFoundException('중복된 아이디입니다.');
 
     return 'true';
@@ -76,5 +80,17 @@ export class UsersService {
     const course_finsh = await this.bicycleService.getAllFinishCourse(id);
 
     return course_finsh;
+  }
+
+  async deleteUserInfo(id: number) {
+    const deleteReslt = await this.userRepository.delete({
+      id: id,
+    });
+
+    if (deleteReslt.affected > 0) {
+      return '회원 탈퇴 성공';
+    } else if (deleteReslt.affected == 0) {
+      throw new Error('회원 탈퇴 실패');
+    }
   }
 }

@@ -57,21 +57,39 @@ describe('UsersService', () => {
       user_id: '11',
       user_pw: '11',
       check: false,
+      email: 'sdfsd@naver.com',
+      email_check: false,
+    };
+
+    const dummyDateFalse2: CreateUserDto = {
+      user_id: '11',
+      user_pw: '11',
+      check: true,
+      email: 'sdfsd@naver.com',
+      email_check: false,
     };
 
     const dummyDateTrue = {
       user_id: '11',
       user_pw: '11',
       check: true,
+      email: 'sdfsd@naver.com',
+      email_check: true,
     };
 
     it('아이디 중복 체크 false', async () => {
       await expect(
         async () => await service.signup(dummyDateFalse),
-      ).rejects.toThrowError(new Error('아이디 중복 체크해주세요'));
+      ).rejects.toThrowError(new Error('아이디 중복 체크해주세요!'));
     });
 
-    it('아이디 중복 체크 true', async () => {
+    it('이메일 인증번호 false', async () => {
+      await expect(
+        async () => await service.signup(dummyDateFalse2),
+      ).rejects.toThrowError(new Error('이메일 인증해주세요!'));
+    });
+
+    it('아이디 중복 체크, 이메일 인증번호 체크 true', async () => {
       const saveResult = jest
         .spyOn(userRepository, 'save')
         .mockResolvedValue({ ...dummyDateTrue, id: 1 } as any);
@@ -207,6 +225,45 @@ describe('UsersService', () => {
 
       expect(course_finsh).toBeCalledTimes(1);
       expect(course_finsh).toBeCalledWith(id);
+    });
+  });
+
+  describe('deleteUserInfo', () => {
+    const id = 11;
+
+    const deleteOk = {
+      raw: [],
+      affected: 1,
+    };
+
+    const deleteFail = {
+      raw: [],
+      affected: 0,
+    };
+
+    it('회원 탛퇴 성공', async () => {
+      const deleteReslt = jest
+        .spyOn(userRepository, 'delete')
+        .mockResolvedValue(deleteOk);
+
+      await service.deleteUserInfo(id);
+
+      expect(deleteReslt).toBeCalledTimes(1);
+      expect(deleteReslt).toBeCalledWith({
+        id: id,
+      });
+    });
+
+    it('회원 탈퇴 실패', async () => {
+      const deleteReslt = jest
+        .spyOn(userRepository, 'delete')
+        .mockResolvedValue(deleteFail);
+
+      await expect(
+        async () => await service.deleteUserInfo(id),
+      ).rejects.toThrowError(new Error('회원 탈퇴 실패'));
+
+      expect(deleteReslt).toBeCalledTimes(1);
     });
   });
 });

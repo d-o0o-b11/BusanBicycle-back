@@ -2,22 +2,38 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserEntity } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { BicycleCourseModule } from './bicycle-course/bicycle-course.module';
-import { BicycleCourseEntity } from './bicycle-course/entities/bicycle-course.entity';
-import { CourseLikeEntity } from './bicycle-course/entities/course-like.entity';
-import { CourseFinishEntity } from './bicycle-course/entities/course-finish.entity';
-import { JwtStrategy } from './auth/strategies/jwtToken.strategy';
-import { typeORMConfig } from './configs/typeorm.config';
 import { BicycleAirModule } from './bicycle-air/bicycle-air.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
+import { EmailModule } from './email/email.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import databaseConfig from './configs/database.config';
+import mailConfig from './configs/mail.config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(typeORMConfig),
+    // TypeOrmModule.forRoot(typeORMConfig),
+    ConfigModule.forRoot({
+      envFilePath: ['src/envs/development.env'],
+      load: [databaseConfig, mailConfig],
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [
+        ConfigModule.forRoot({
+          // envFilePath: ['src/envs/development.env'],
+          load: [databaseConfig],
+          // isGlobal: true,
+        }),
+      ],
+      useFactory: async (configService: ConfigService) => ({
+        ...configService.get('postgres'),
+      }),
+      inject: [ConfigService],
+    }),
     UsersModule,
     AuthModule,
     BicycleCourseModule,
@@ -25,6 +41,7 @@ import { classes } from '@automapper/classes';
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

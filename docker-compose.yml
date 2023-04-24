@@ -23,6 +23,7 @@ services:
       dockerfile: dockerfile
     volumes:
       - .:/usr/src/bicyclebusan2
+      - /usr/src/bicyclebusan2/node_modules
     ports:
       - 3001:3001
     restart: always

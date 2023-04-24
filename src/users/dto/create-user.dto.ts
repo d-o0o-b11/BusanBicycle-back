@@ -18,10 +18,24 @@ export class CreateUserDto {
   })
   user_pw: string;
 
+  @IsString()
+  @ApiProperty({
+    description: '이메일',
+    example: 'ddd@naver.com',
+  })
+  email: string;
+
   @IsBoolean()
   @ApiProperty({
     description: '아이디 중복체크 여부',
     example: true,
   })
   check: boolean;
+
+  @IsBoolean()
+  @ApiProperty({
+    description: '이메일 인증번호 성공 여부',
+    example: true,
+  })
+  email_check: boolean;
 }

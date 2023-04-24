@@ -25,11 +25,11 @@ export class CourseFinishEntity {
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
   finish_date: Date;
 
-  @ManyToOne(() => BicycleCourseEntity)
+  @ManyToOne(() => BicycleCourseEntity, { cascade: true })
   @JoinColumn({ name: 'course_id' })
   course: BicycleCourseEntity;
 
-  @OneToOne(() => UserEntity)
+  @OneToOne(() => UserEntity, { cascade: true })
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 }
