@@ -40,17 +40,6 @@ export class UsersService {
     return saveResult;
   }
 
-  async mailchck(email: string) {
-    // const mailcheck = await this.emailService.sendMail(email);
-
-    // if (mailcheck === randomNum) {
-    //   return true;
-    // } else {
-    //   throw new Error('인증번호가 틀렸습니다.');
-    // }
-    console.log(email);
-  }
-
   async login(data: LoginDto) {
     const result = await this.userRepository.findOne({
       where: { user_id: data.user_id },

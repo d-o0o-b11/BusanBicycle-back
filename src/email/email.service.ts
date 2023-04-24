@@ -21,12 +21,5 @@ export class EmailService {
     } catch (e) {
       throw new Error('이메일 전송 실패');
     }
-
-    // .then(() => {
-    //   return randomNum;
-    // })
-    // .catch((error) => {
-    //   throw new Error('이메일 전송 실패');
-    // });
   }
 }
