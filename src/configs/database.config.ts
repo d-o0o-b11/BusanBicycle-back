@@ -6,6 +6,7 @@ import { IsDatabaseConfig } from './postgres.config.interface';
 export default registerAs('postgres', () => {
   const schema = Joi.object<IsDatabaseConfig, true>({
     type: Joi.string().required(),
+    // NOED_ENV: Joi.string().valid('dev', 'prod').required(),
     host: Joi.string().required(),
     port: Joi.number().required(),
     username: Joi.string().required(),
