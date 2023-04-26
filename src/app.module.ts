@@ -17,16 +17,20 @@ import mailConfig from './configs/mail.config';
   imports: [
     // TypeOrmModule.forRoot(typeORMConfig),
     ConfigModule.forRoot({
-      envFilePath: ['src/envs/development.env'],
+      // envFilePath: ['src/envs/development.env, src/envs/production.env'],
+      envFilePath: [`src/envs/${process.env.NODE_ENV}.env`],
       load: [databaseConfig, mailConfig],
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [
         ConfigModule.forRoot({
-          // envFilePath: ['src/envs/development.env'],
+          envFilePath:
+            process.env.NODE_ENV == 'dev'
+              ? 'src/envs/development.env'
+              : 'src/envs/production.env',
           load: [databaseConfig],
-          // isGlobal: true,
+          isGlobal: true,
         }),
       ],
       useFactory: async (configService: ConfigService) => ({

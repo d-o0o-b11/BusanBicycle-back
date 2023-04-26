@@ -4,7 +4,7 @@ version: '3.7'
 services:
   postgres-container:
     container_name: DataBase
-    image: postgres:13
+    image: postgres:13 #15.2
     ports:
       - 5432:5432
     environment:
@@ -18,9 +18,7 @@ services:
 
   pensive_jackson:
     container_name: server
-    build:
-      context: .
-      dockerfile: dockerfile
+    image: jimin8830/bicyclebusan:latest #허브 만들고 레파지토리 이름
     volumes:
       - .:/usr/src/bicyclebusan2
       - /usr/src/bicyclebusan2/node_modules
