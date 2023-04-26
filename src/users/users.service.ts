@@ -93,4 +93,14 @@ export class UsersService {
       throw new Error('회원 탈퇴 실패');
     }
   }
+
+  async findUserEmail(email: string) {
+    const findResult = await this.userRepository.findOne({
+      where: {
+        email: email,
+      },
+    });
+
+    return findResult;
+  }
 }

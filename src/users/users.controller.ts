@@ -9,11 +9,9 @@ import {
   HttpStatus,
   Query,
   Delete,
-  Param,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { CheckIdDto } from './dto/checkid-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Token } from 'src/auth/decorator/auth.decorator';
 import {

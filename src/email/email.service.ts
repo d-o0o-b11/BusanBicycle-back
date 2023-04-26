@@ -1,11 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class EmailService {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(
+    private readonly mailerService: MailerService,
+    private readonly userService: UsersService,
+  ) {}
 
   public async sendMail(toEmail: string) {
+    if (await this.userService.findUserEmail) {
+      throw new Error('존재하는 이메일입니다.');
+    }
+
     const randomNum: number = Math.floor(Math.random() * 900000) + 100000;
 
     try {
