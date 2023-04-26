@@ -266,4 +266,23 @@ describe('UsersService', () => {
       expect(deleteReslt).toBeCalledTimes(1);
     });
   });
+
+  describe('findUserEmail', () => {
+    const email = 'sdfdsf@sdf.fds';
+
+    it('이메일 중복여부 확인', async () => {
+      const findResult = jest
+        .spyOn(userRepository, 'findOne')
+        .mockResolvedValue('11' as any);
+
+      await service.findUserEmail(email);
+
+      expect(findResult).toBeCalledTimes(1);
+      expect(findResult).toBeCalledWith({
+        where: {
+          email: email,
+        },
+      });
+    });
+  });
 });

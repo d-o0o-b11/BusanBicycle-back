@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { UsersService } from 'src/users/users.service';
 
@@ -10,8 +10,10 @@ export class EmailService {
   ) {}
 
   public async sendMail(toEmail: string) {
-    if (await this.userService.findUserEmail) {
-      throw new Error('존재하는 이메일입니다.');
+    const findEmail = await this.userService.findUserEmail(toEmail);
+
+    if (findEmail) {
+      throw new NotFoundException('존재하는 이메일입니다.');
     }
 
     const randomNum: number = Math.floor(Math.random() * 900000) + 100000;
