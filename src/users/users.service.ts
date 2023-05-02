@@ -23,11 +23,6 @@ export class UsersService {
   ) {}
 
   async signup(data: CreateUserDto) {
-    const encrypt = await this.crytoService.encrypt(data.user_pw);
-    console.log(encrypt);
-    const decrypt = await this.crytoService.decrypt(encrypt);
-    console.log(decrypt);
-
     if (!data.check) {
       throw new Error('아이디 중복 체크해주세요!');
     }
@@ -37,16 +32,17 @@ export class UsersService {
     }
 
     const entity = new UserEntity();
+    const encrypt = await this.crytoService.encrypt(data.user_pw);
 
-    // entity.user_id = data.user_id;
-    // entity.user_pw = data.user_pw;
-    // entity.check = data.check;
-    // entity.email = data.email;
-    // entity.email_check = data.email_check;
+    entity.user_id = data.user_id;
+    entity.user_pw = encrypt;
+    entity.check = data.check;
+    entity.email = data.email;
+    entity.email_check = data.email_check;
 
-    // const saveResult = await this.userRepository.save(entity);
+    const saveResult = await this.userRepository.save(entity);
 
-    // return saveResult;
+    return saveResult;
   }
 
   async login(data: LoginDto) {
@@ -54,9 +50,11 @@ export class UsersService {
       where: { user_id: data.user_id },
     });
 
+    const decrypt = await this.crytoService.decrypt(result.user_pw);
+
     if (!result?.user_id) {
       throw new NotFoundException('존재하지 않는 아이디입니다.');
-    } else if (result.user_pw != data.user_pw) {
+    } else if (decrypt != data.user_pw) {
       throw new NotFoundException('비밀번호가 틀렸습니다.');
     }
     /**

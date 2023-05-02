@@ -10,7 +10,7 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 30 })
   user_id: string;
 
-  @Column({ type: 'varchar', length: 30 })
+  @Column({ type: 'varchar', length: 100 })
   user_pw: string;
 
   @Column({ type: 'varchar', length: 30 })
