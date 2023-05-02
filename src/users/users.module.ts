@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { BicycleCourseModule } from 'src/bicycle-course/bicycle-course.module';
+import { CryptoModule } from 'src/crypto/crypto.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { BicycleCourseModule } from 'src/bicycle-course/bicycle-course.module';
     // }),
     AuthModule,
     BicycleCourseModule,
+    CryptoModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

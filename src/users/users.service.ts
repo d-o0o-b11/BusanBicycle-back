@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,6 +6,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { BicycleCourseService } from 'src/bicycle-course/bicycle-course.service';
 import { LoginDto } from './dto/login-user.dto';
+import {
+  CRYTO_SERVICE_TOKEN,
+  IsCryptoService,
+} from 'src/crypto/crypto-service.interface';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +18,8 @@ export class UsersService {
     private readonly userRepository: Repository<UserEntity>,
     private jwtService: JwtService,
     private readonly bicycleService: BicycleCourseService,
+    @Inject(CRYTO_SERVICE_TOKEN)
+    private readonly crytoService: IsCryptoService,
   ) {}
 
   async signup(data: CreateUserDto) {
@@ -25,17 +31,24 @@ export class UsersService {
       throw new Error('이메일 인증해주세요!');
     }
 
+    const test = await this.crytoService.transFormPassword(data.user_pw);
+    console.log('test', test);
+    const test2 = await this.crytoService.decryptedPassword(
+      test.encryptedText,
+      test.key,
+    );
+    console.log(test2 == data.user_pw);
     const entity = new UserEntity();
 
-    entity.user_id = data.user_id;
-    entity.user_pw = data.user_pw;
-    entity.check = data.check;
-    entity.email = data.email;
-    entity.email_check = data.email_check;
+    // entity.user_id = data.user_id;
+    // entity.user_pw = data.user_pw;
+    // entity.check = data.check;
+    // entity.email = data.email;
+    // entity.email_check = data.email_check;
 
-    const saveResult = await this.userRepository.save(entity);
+    // const saveResult = await this.userRepository.save(entity);
 
-    return saveResult;
+    // return saveResult;
   }
 
   async login(data: LoginDto) {

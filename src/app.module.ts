@@ -10,6 +10,7 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { EmailModule } from './email/email.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CryptoModule } from './crypto/crypto.module';
 import databaseConfig from './configs/database.config';
 import mailConfig from './configs/mail.config';
 
@@ -46,6 +47,7 @@ import mailConfig from './configs/mail.config';
       strategyInitializer: classes(),
     }),
     EmailModule,
+    CryptoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
