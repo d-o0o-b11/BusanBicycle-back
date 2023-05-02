@@ -22,6 +22,7 @@ export default registerAs('postgres', () => {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
   };
+  // console.log(config);
 
   const { error, value } = schema.validate(config, {
     abortEarly: false,

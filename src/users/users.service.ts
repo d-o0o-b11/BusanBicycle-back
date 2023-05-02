@@ -23,6 +23,11 @@ export class UsersService {
   ) {}
 
   async signup(data: CreateUserDto) {
+    const encrypt = await this.crytoService.encrypt(data.user_pw);
+    console.log(encrypt);
+    const decrypt = await this.crytoService.decrypt(encrypt);
+    console.log(decrypt);
+
     if (!data.check) {
       throw new Error('아이디 중복 체크해주세요!');
     }
@@ -31,13 +36,6 @@ export class UsersService {
       throw new Error('이메일 인증해주세요!');
     }
 
-    const test = await this.crytoService.transFormPassword(data.user_pw);
-    console.log('test', test);
-    const test2 = await this.crytoService.decryptedPassword(
-      test.encryptedText,
-      test.key,
-    );
-    console.log(test2 == data.user_pw);
     const entity = new UserEntity();
 
     // entity.user_id = data.user_id;

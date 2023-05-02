@@ -1,39 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { IsCryptoService } from './crypto-service.interface';
-import { createCipheriv, randomBytes, scrypt } from 'crypto';
-import { promisify } from 'util';
+import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
 
 @Injectable()
 export class CryptoService implements IsCryptoService {
-  /**
-   * 비밀번호 암호화
-   * @param password
-   */
-  async transFormPassword(password: string) {
-    const iv = randomBytes(16);
-    const key = (await promisify(scrypt)(password, 'salt', 32)) as Buffer;
-    const cipher = createCipheriv('aes-256-ctr', key, iv);
+  private readonly algorithm = 'aes-256-cbc';
+  private readonly key = 'my-secret-keymy-secret-keyaaaaaa';
+  private readonly iv = randomBytes(16);
 
-    const textToEncrypt = 'Nest';
-    const encryptedText = Buffer.concat([
-      cipher.update(textToEncrypt),
-      cipher.final(),
-    ]);
-
-    return { encryptedText, key };
+  encrypt(text: string): string {
+    const cipher = createCipheriv(
+      this.algorithm,
+      Buffer.from(this.key),
+      this.iv,
+    );
+    let encrypted = cipher.update(text);
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    return `${this.iv.toString('hex')}:${encrypted.toString('hex')}`;
   }
 
-  async decryptedPassword(password: string) {
-    const iv = randomBytes(16);
-    const key = (await promisify(scrypt)(password, 'salt', 32)) as Buffer;
-    const decipher = createCipheriv('aes-256-ctr', key, iv);
-
-    const decryptedText = Buffer.concat([
-      decipher.update(password),
-      decipher.final(),
-    ]);
-
-    console.log(decryptedText);
-    return decryptedText;
+  decrypt(text: string): string {
+    const parts = text.split(':');
+    const iv = Buffer.from(parts.shift(), 'hex');
+    const encryptedText = Buffer.from(parts.join(':'), 'hex');
+    const decipher = createDecipheriv(
+      this.algorithm,
+      Buffer.from(this.key),
+      iv,
+    );
+    let decrypted = decipher.update(encryptedText);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+    return decrypted.toString();
   }
 }
