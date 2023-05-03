@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { UsersService } from 'src/users/users.service';
-import { Cron } from '@nestjs/schedule';
 import { BicycleCourseService } from 'src/bicycle-course/bicycle-course.service';
 
 @Injectable()
