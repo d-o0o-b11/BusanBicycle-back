@@ -5,6 +5,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { ConfigService } from '@nestjs/config';
 import { UsersModule } from 'src/users/users.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { BicycleCourseModule } from 'src/bicycle-course/bicycle-course.module';
 
 @Module({
   imports: [
@@ -33,7 +35,9 @@ import { UsersModule } from 'src/users/users.module';
         },
       }),
     }),
+    ScheduleModule.forRoot(),
     UsersModule,
+    BicycleCourseModule,
   ],
   controllers: [EmailController],
   providers: [EmailService],

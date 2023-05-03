@@ -112,4 +112,11 @@ export class UsersService {
 
     return findResult;
   }
+
+  async findUser() {
+    const find = await this.userRepository.find();
+    console.log(find);
+
+    return find;
+  }
 }

@@ -34,4 +34,13 @@ export class EmailController {
       throw new InternalServerErrorException(error.message);
     }
   }
+
+  @Post('test')
+  async sendBestCourse() {
+    try {
+      return await this.emailService.sendBestCourse();
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
 }
