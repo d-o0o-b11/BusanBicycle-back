@@ -21,13 +21,14 @@ services:
     build:
       context: .
       dockerfile: dockerfile
+      target: deps
     volumes:
-      - .:/usr/src/bicyclebusan2
-      - /usr/src/bicyclebusan2/node_modules
+      - .:/usr/src/bicyclebusan2/app
+      - /usr/src/bicyclebusan2/app/node_modules
     ports:
       - 3001:3001
     restart: always
-    command: yarn start:debug
+    command: yarn start:dev
     networks:
       - test-networks
 
