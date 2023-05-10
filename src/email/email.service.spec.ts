@@ -3,11 +3,13 @@ import { EmailService } from './email.service';
 import { MailerService } from '@nestjs-modules/mailer';
 import { UsersService } from 'src/users/users.service';
 import { NotFoundException } from '@nestjs/common';
+import { BicycleCourseService } from 'src/bicycle-course/bicycle-course.service';
 
 describe('EmailService', () => {
   let service: EmailService;
   let mailerService: MailerService;
   let userService: UsersService;
+  let bicycleService: BicycleCourseService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,6 +25,13 @@ describe('EmailService', () => {
           provide: UsersService,
           useValue: {
             findUserEmail: jest.fn(),
+            findUser: jest.fn(),
+          },
+        },
+        {
+          provide: BicycleCourseService,
+          useValue: {
+            getBestCourse: jest.fn(),
           },
         },
       ],
@@ -31,12 +40,14 @@ describe('EmailService', () => {
     service = module.get<EmailService>(EmailService);
     mailerService = module.get<MailerService>(MailerService);
     userService = module.get<UsersService>(UsersService);
+    bicycleService = module.get<BicycleCourseService>(BicycleCourseService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
     expect(mailerService).toBeDefined();
     expect(userService).toBeDefined();
+    expect(bicycleService).toBeDefined();
   });
 
   describe('sendMail', () => {
@@ -59,7 +70,7 @@ describe('EmailService', () => {
           email: 'jimin8830@naver.com',
           check: true,
           email_check: true,
-        } as any); //왜 여기를 통과못하지
+        } as any);
 
       await expect(
         async () => await service.sendMail(toEmail),
@@ -82,6 +93,55 @@ describe('EmailService', () => {
         text: 'welcome nodemailer ', // plaintext body
         html: `<b>회원 가입을 환영합니다.</b> <div>인증 번호: ${randomNum}</div>`, // HTML body content
       });
+    });
+  });
+
+  describe('sendBestCourse', () => {
+    const dummyData = [
+      {
+        gugunnm: 1,
+        startSpot: 'test',
+        endSpot: 'test2',
+        gugunWithWalk: '12.1',
+      },
+      {
+        gugunnm: 2,
+        startSpot: 'test',
+        endSpot: 'test2',
+        gugunWithWalk: '12.1',
+      },
+    ];
+
+    const dummyUser = [{ email: '12312' }, { email: '234' }];
+
+    it('월요일마다 이메일 전송', async () => {
+      const course = jest
+        .spyOn(bicycleService, 'getBestCourse')
+        .mockResolvedValue(dummyData);
+
+      const emailBody = `
+      <h1>BEST COURSE</h1>
+      <br>
+        ${dummyData
+          .map(
+            (item) =>
+              `<li>
+              ${item.gugunnm} << 시작지점: ${item.startSpot} , 종료지점: ${item.endSpot} >> ${item.gugunWithWalk}km
+              </li>
+              <hr/>
+              `,
+          )
+          .join('')}
+      </br>
+      `;
+
+      const users = jest
+        .spyOn(userService, 'findUser')
+        .mockResolvedValue(dummyUser as any);
+
+      const sendMail = jest.spyOn(mailerService, 'sendMail');
+
+      await service.sendBestCourse();
     });
   });
 });

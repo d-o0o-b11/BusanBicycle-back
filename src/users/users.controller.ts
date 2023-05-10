@@ -16,6 +16,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Token } from 'src/auth/decorator/auth.decorator';
 import {
   ApiBearerAuth,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -44,6 +45,9 @@ export class UsersController {
   @ApiOperation({
     summary: '로그인',
   })
+  @ApiNotFoundResponse({
+    description: '유저 아이디로 조회된 결과가 없는 경우',
+  })
   @Post('login')
   async findlogin(@Body() loginData: LoginDto) {
     try {
@@ -53,7 +57,7 @@ export class UsersController {
         throw error;
       }
 
-      throw new InternalServerErrorException(error);
+      throw new InternalServerErrorException(error.message);
     }
   }
 

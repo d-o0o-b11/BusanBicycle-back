@@ -10,6 +10,7 @@ import {
   CRYTO_SERVICE_TOKEN,
   IsCryptoService,
 } from 'src/crypto/crypto-service.interface';
+import { NotFoundError } from './not-found.error';
 
 @Injectable()
 export class UsersService {
@@ -50,11 +51,13 @@ export class UsersService {
       where: { user_id: data.user_id },
     });
 
+    if (!result) {
+      throw new NotFoundException('존재하지 않는 아이디입니다.');
+    }
+
     const decrypt = await this.crytoService.decrypt(result.user_pw);
 
-    if (!result?.user_id) {
-      throw new NotFoundException('존재하지 않는 아이디입니다.');
-    } else if (decrypt != data.user_pw) {
+    if (decrypt != data.user_pw) {
       throw new NotFoundException('비밀번호가 틀렸습니다.');
     }
     /**

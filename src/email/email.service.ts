@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { UsersService } from 'src/users/users.service';
 import { BicycleCourseService } from 'src/bicycle-course/bicycle-course.service';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class EmailService {
@@ -24,9 +25,9 @@ export class EmailService {
       this.mailerService.sendMail({
         to: toEmail,
         from: 'jimin8830@naver.com',
-        subject: '🎉 [부산 자전거 도로] 가입을 환영합니다! 🎉', // Subject line
-        text: 'welcome nodemailer ', // plaintext body
-        html: `<b>회원 가입을 환영합니다.</b> <div>인증 번호: ${randomNum}</div>`, // HTML body content
+        subject: '🎉 [부산 자전거 도로] 가입을 환영합니다! 🎉',
+        text: 'welcome nodemailer ',
+        html: `<b>회원 가입을 환영합니다.</b> <div>인증 번호: ${randomNum}</div>`,
       });
 
       return randomNum;
@@ -35,7 +36,7 @@ export class EmailService {
     }
   }
 
-  // @Cron('0 0 10 * * 1')
+  @Cron('0 0 10 * * 1')
   public async sendBestCourse() {
     const course = await this.bicycleService.getBestCourse();
     const bestCourseArr = [];
@@ -61,24 +62,17 @@ export class EmailService {
     `;
     const users = await this.userService.findUser();
 
-    for (const user of users) {
-      await this.mailerService.sendMail({
-        to: user.email,
-        from: 'jimin8830@naver.com',
-        subject: '[부산 자전거 도로] 이번주 베스트 코스!',
-        html: emailBody,
-      });
+    try {
+      for (const user of users) {
+        await this.mailerService.sendMail({
+          to: user.email,
+          from: 'jimin8830@naver.com',
+          subject: '[부산 자전거 도로] 이번주 베스트 코스!',
+          html: emailBody,
+        });
+      }
+    } catch (e) {
+      throw new Error('이메일 전송 실패');
     }
-
-    // try {
-    //   this.mailerService.sendMail({
-    //     to: toEmail,
-    //     from: 'jimin8830@naver.com',
-    //     subject: '[부산 자전거 도로] 이번주 베스트 코스!',
-    //     html: emailBody,
-    //   });
-    // } catch (e) {
-    //   throw new Error('이메일 전송 실패');
-    // }
   }
 }
