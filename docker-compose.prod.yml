@@ -4,13 +4,14 @@ version: '3.7'
 services:
   pensive_jackson:
     container_name: server
-    build:
-      context: .
-      dockerfile: dockerfile
-      target: runner
+    # build:
+    #   context: .
+    #   dockerfile: dockerfile
+    # target: runner
     # image: jimin8830/bicyclebusan:latest #허브 만들고 레파지토리 이름
+    image: jimin8830/bicyclebusan:test1.0 #허브 만들고 레파지토리 이름
     volumes:
-      - .:/usr/src/bicyclebusan2/app
+      # - .:/usr/src/bicyclebusan2/app
       - /usr/src/bicyclebusan2/app/node_modules
     ports:
       - 3001:3001
